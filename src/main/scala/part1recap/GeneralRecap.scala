@@ -31,4 +31,9 @@ object GeneralRecap extends App {
     else factorial(n - 1, acc * n)
   }
 
+  // OOP
+  class Animal
+  class Dog extends Animal
+  val aDog: Animal = new Dog
+
 }
