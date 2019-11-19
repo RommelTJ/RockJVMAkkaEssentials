@@ -1,5 +1,7 @@
 package part1recap
 
+import scala.annotation.tailrec
+
 object GeneralRecap extends App {
 
   val aCondition: Boolean = false
@@ -21,5 +23,12 @@ object GeneralRecap extends App {
 
   // functions
   def aFunction(x: Int): Int = x + 1
+
+  // recursion - TAIL recursion
+  @tailrec
+  def factorial(n: Int, acc: Int): Int = {
+    if (n <= 0) acc
+    else factorial(n - 1, acc * n)
+  }
 
 }
