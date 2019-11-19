@@ -19,4 +19,7 @@ object GeneralRecap extends App {
   // Unit
   val theUnit = println("Hello, Scala")
 
+  // functions
+  def aFunction(x: Int): Int = x + 1
+
 }
