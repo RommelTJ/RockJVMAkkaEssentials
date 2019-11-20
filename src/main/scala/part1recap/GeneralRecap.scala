@@ -89,4 +89,11 @@ object GeneralRecap extends App {
   List(1, 2, 3).map(incrementer)
   // map = HOF (Higher Order Function)
 
+  // for-comprehensions
+  val pairs = for {
+    num <- List(1, 2, 3, 4)
+    char <- List('a', 'b', 'c', 'd')
+  } yield num + "-" + char
+  // List(1, 2, 3, 4).flatMap(num => List('a', 'b', 'c', 'd').map(char => num + "-" + char))
+
 }
