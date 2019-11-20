@@ -65,5 +65,15 @@ object GeneralRecap extends App {
   // Case Classes
   case class Person(name: String, age: Int)
 
+  // Exceptions
+  val aPotentialFailure = try {
+    throw new RuntimeException("I'm innocent, I swear!") // of type "Nothing", not "Unit" or "Exception"
+  } catch {
+    case e: Exception => "I caught an exception!"
+  } finally {
+    // side-effects
+    println("Some logs")
+  }
+
 
 }
