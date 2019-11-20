@@ -56,4 +56,8 @@ object GeneralRecap extends App {
   }
   aCarnivore eat aDog
 
+  // Generics
+  abstract class MyList[+A]
+
+
 }
