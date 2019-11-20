@@ -45,4 +45,9 @@ object GeneralRecap extends App {
     override def eat(a: Animal): Unit = println("Chomp! chomp!")
   }
 
+  // Method notations
+  val aCroc = new Crocodile
+  aCroc.eat(aDog)
+  aCroc eat aDog
+
 }
