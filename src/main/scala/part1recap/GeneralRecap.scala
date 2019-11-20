@@ -59,5 +59,8 @@ object GeneralRecap extends App {
   // Generics
   abstract class MyList[+A]
 
+  // Companion objects
+  object MyList
+
 
 }
