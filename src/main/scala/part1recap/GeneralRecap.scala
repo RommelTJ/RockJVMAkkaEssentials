@@ -50,4 +50,10 @@ object GeneralRecap extends App {
   aCroc.eat(aDog)
   aCroc eat aDog
 
+  // Anonymous Classes
+  val aCarnivore = new Carnivore {
+    override def eat(a: Animal): Unit = println("ROAR")
+  }
+  aCarnivore eat aDog
+
 }
