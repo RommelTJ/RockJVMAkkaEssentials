@@ -1,6 +1,7 @@
 package part1recap
 
 import scala.annotation.tailrec
+import scala.util.Try
 
 object GeneralRecap extends App {
 
@@ -95,5 +96,14 @@ object GeneralRecap extends App {
     char <- List('a', 'b', 'c', 'd')
   } yield num + "-" + char
   // List(1, 2, 3, 4).flatMap(num => List('a', 'b', 'c', 'd').map(char => num + "-" + char))
+
+  // Seq, Array, List, Vector, Map, Tuples, Sets
+
+  // "collections"
+  // Options and Try
+  val anOption = Some(2)
+  val aTry = Try {
+    throw new RuntimeException
+  }
 
 }
