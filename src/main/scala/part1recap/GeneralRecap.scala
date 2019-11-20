@@ -82,4 +82,7 @@ object GeneralRecap extends App {
   val incremented = incrementer(42) // 43
   // Scala compiler apply trick: incrementer.apply(42)
 
+  val anonymousIncrementer = (x: Int) => x + 1
+  // Int => Int === Function1[Int, Int]
+
 }
