@@ -62,5 +62,8 @@ object GeneralRecap extends App {
   // Companion objects
   object MyList
 
+  // Case Classes
+  case class Person(name: String, age: Int)
+
 
 }
