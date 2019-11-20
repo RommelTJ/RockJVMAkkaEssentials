@@ -75,5 +75,11 @@ object GeneralRecap extends App {
     println("Some logs")
   }
 
+  // Functional Programming
+  val incrementer = new Function1[Int, Int] {
+    override def apply(v1: Int): Int = v1 + 1
+  }
+  val incremented = incrementer(42) // 43
+  // Scala compiler apply trick: incrementer.apply(42)
 
 }
