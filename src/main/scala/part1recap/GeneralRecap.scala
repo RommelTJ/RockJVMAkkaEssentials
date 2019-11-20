@@ -36,4 +36,13 @@ object GeneralRecap extends App {
   class Dog extends Animal
   val aDog: Animal = new Dog
 
+  // Abstract Classes and Traits
+  trait Carnivore {
+    def eat(a: Animal): Unit // abstract
+  }
+
+  class Crocodile extends Animal with Carnivore {
+    override def eat(a: Animal): Unit = println("Chomp! chomp!")
+  }
+
 }
