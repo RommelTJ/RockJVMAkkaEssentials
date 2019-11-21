@@ -64,4 +64,13 @@ object AdvancedRecap extends App {
   // passes it into our function for us
   setTimeout(() => println("timeout"))
 
+  // Implicit Conversions
+  // 1) implicit defs
+  case class Person(name: String) {
+    def greet: String = s"Hi, my name is $name"
+  }
+  implicit def fromStringToPerson(string: String): Person = Person(string)
+  // Compiler runs implict def on the String, then calls greet method.
+  "Peter".greet // fromStringToPerson("Peter").greet()
+
 }
