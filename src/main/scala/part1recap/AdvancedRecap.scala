@@ -56,6 +56,12 @@ object AdvancedRecap extends App {
     case _ => println("Confused")
   }
 
-
+  // implicits
+  implicit val timeout: Int = 3000
+  def setTimeout(f: () => Unit)(implicit timeout: Int): Unit = f()
+  setTimeout(() => println("timeout"))(timeout)
+  // can omit extra parameter list because the implicit value was defined before and the compiler uses it and
+  // passes it into our function for us
+  setTimeout(() => println("timeout"))
 
 }
