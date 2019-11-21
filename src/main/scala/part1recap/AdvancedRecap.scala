@@ -43,4 +43,19 @@ object AdvancedRecap extends App {
   pfChain(60) // 9000 per pfChain
   pfChain(457) // throws MatchError
 
+  // Type Aliases
+  type ReceiveFunction = PartialFunction[Any, Unit]
+
+  // You can use "ReceiveFunction" or "PartialFunction[Any, Unit]" interchangeably
+  def receive: ReceiveFunction = {
+    case 1 => println("Hello")
+    case _ => println("Confused")
+  }
+  def receive2: PartialFunction[Any, Unit] = {
+    case 1 => println("Hello")
+    case _ => println("Confused")
+  }
+
+
+
 }
