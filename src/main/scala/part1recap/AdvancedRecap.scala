@@ -1,5 +1,7 @@
 package part1recap
 
+import scala.concurrent.Future
+
 object AdvancedRecap extends App {
   // Partial Functions
   // A partial function that only works for values 1, 2, and 5. Throws exception for other values.
@@ -79,5 +81,24 @@ object AdvancedRecap extends App {
   }
   // Compiler automatically converts string into Dog, then calls the bark method.
   "Lassie".bark // new Dog("Lassie").bark()
+
+  // Organize - Implicit conversions can get confusing if they're not organized.
+  // You can define how the compiler behaves.
+  // The compiler chooses in this order: local scope > imported scope > companion objects.
+  implicit val inverseOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
+  List(1, 2, 3).sorted // List(3, 2, 1) -> Because "inverseOrdering" is in "local scope".
+  // Local Scope = The scope where the method with the implicit parameter is being called.
+
+  // Imported scope
+  import scala.concurrent.ExecutionContext.Implicits.global
+  val future = Future {
+    println("Hello, Future")
+  }
+
+  // Companion Objects of the types included in the call
+  object Person {
+    implicit val personOrdering: Ordering[Person] = Ordering.fromLessThan((a, b) => a.name.compareTo(b.name) < 0)
+  }
+  List(Person("Bob"), Person("Alice")).sorted // List(Person("Alice"), Person("Bob"))
 
 }
