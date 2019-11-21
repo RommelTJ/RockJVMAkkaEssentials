@@ -73,4 +73,11 @@ object AdvancedRecap extends App {
   // Compiler runs implict def on the String, then calls greet method.
   "Peter".greet // fromStringToPerson("Peter").greet()
 
+  // 2) implicit classes
+  implicit class Dog(name: String) {
+    def bark: Unit = println("Bark")
+  }
+  // Compiler automatically converts string into Dog, then calls the bark method.
+  "Lassie".bark // new Dog("Lassie").bark()
+
 }
