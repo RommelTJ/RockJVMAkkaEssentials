@@ -11,4 +11,11 @@ object MultithreadingRecap extends App {
   aThread2.start()
   aThread2.join()
 
+  // threads are unpredictable
+  val threadHello = new Thread(() => (1 to 1000).foreach(_ => println("hello")))
+  val threadGoodbye = new Thread(() => (1 to 1000).foreach(_ => println("goodbye")))
+  threadHello.start()
+  threadGoodbye.start()
+  // Different runs produce different results!
+
 }
