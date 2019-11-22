@@ -1,5 +1,8 @@
 package part1recap
 
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+
 object MultithreadingRecap extends App {
 
   // Creating threads on the JVM
@@ -42,5 +45,18 @@ object MultithreadingRecap extends App {
 
   // Inter-thread communication on the JVM
   // wait - notify mechanism
+
+  // Scala Futures
+  import scala.concurrent.ExecutionContext.Implicits.global
+  val future = Future {
+    //long computation on a different thread
+    42
+  }
+
+  // callbacks
+  future.onComplete {
+    case Success(42) => println("I found the meaning of life")
+    case Failure(_) => println("Something happened.")
+  }
 
 }
