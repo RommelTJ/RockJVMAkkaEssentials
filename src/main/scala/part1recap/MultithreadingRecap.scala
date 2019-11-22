@@ -64,4 +64,10 @@ object MultithreadingRecap extends App {
   val aFlatFuture = future.flatMap { value => Future(value + 2) } // Future with 44
   val filteredFuture = future.filter(_ % 2 == 0 ) // NoSuchElementException
 
+  // For-Comprehensions
+  val aNonsenseFuture = for {
+    meaningOfLife <- future
+    filteredMeaning <- filteredFuture
+  } yield meaningOfLife + filteredMeaning
+
 }
