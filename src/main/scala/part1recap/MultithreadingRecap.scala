@@ -21,6 +21,22 @@ object MultithreadingRecap extends App {
   class BankAccount(private var amount: Int) {
     override def toString: String = "" + amount
     def withdraw(money: Int): Unit = this.amount -= money
+
+    def safeWithdraw(money: Int): Unit = this.synchronized { // thread-safe
+      this.amount -= money
+    }
   }
+  /*
+  BA (10000)
+  T1 -> withdraw 1000
+  T2 -> withdraw 2000
+
+  T1 -> this.amount = this.amount - .... // preempted by the OS
+  T2 -> this.amount = this.amount - 2000 = 8000
+  T1 -> -1000 = 9000
+  => result = 9000
+
+  this.amount = this.amount - 1000 is NOT ATOMIC
+   */
 
 }
