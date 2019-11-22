@@ -59,4 +59,9 @@ object MultithreadingRecap extends App {
     case Failure(_) => println("Something happened.")
   }
 
+  // Monadic and Function Primitives
+  val aProcessedFuture = future.map(_ + 1) // Future with 43
+  val aFlatFuture = future.flatMap { value => Future(value + 2) } // Future with 44
+  val filteredFuture = future.filter(_ % 2 == 0 ) // NoSuchElementException
+
 }
