@@ -72,4 +72,6 @@ object MultithreadingRecap extends App {
 
   // andThen, recover/recoverWith
 
+  // Promises
+
 }
