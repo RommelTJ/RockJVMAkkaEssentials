@@ -18,4 +18,9 @@ object MultithreadingRecap extends App {
   threadGoodbye.start()
   // Different runs produce different results!
 
+  class BankAccount(private var amount: Int) {
+    override def toString: String = "" + amount
+    def withdraw(money: Int): Unit = this.amount -= money
+  }
+
 }
