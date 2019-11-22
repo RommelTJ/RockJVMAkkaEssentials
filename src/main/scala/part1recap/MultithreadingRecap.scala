@@ -40,4 +40,7 @@ object MultithreadingRecap extends App {
   this.amount = this.amount - 1000 is NOT ATOMIC
    */
 
+  // Inter-thread communication on the JVM
+  // wait - notify mechanism
+
 }
