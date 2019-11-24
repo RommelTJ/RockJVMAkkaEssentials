@@ -24,7 +24,9 @@ object ActorsIntro extends App {
 
     // behavior
     override def receive: PartialFunction[Any, Unit] = {
-      case message: String => totalWords += message.split(" ").length
+      case message: String =>
+        println(s"[word counter] I have received $message")
+        totalWords += message.split(" ").length
       case msg => println(s"[word counter] I cannot understand ${msg.toString}")
     }
   }
@@ -32,5 +34,10 @@ object ActorsIntro extends App {
   // Part 3 - Instantiate an Actor
 
   val wordCounter: ActorRef = actorSystem.actorOf(Props[WordCountActor], "wordCounter")
+
+  // Part 4 - Communicate
+
+  wordCounter ! "I am learning Akka and it's pretty damn cool!"
+  wordCounter.!("I am learning Akka and it's pretty damn cool!") // equivalent
 
 }
