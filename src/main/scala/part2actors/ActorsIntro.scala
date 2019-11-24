@@ -47,4 +47,15 @@ object ActorsIntro extends App {
   // the "!" is called "tell"
   // PartialFunction[Any, Unit] is an alias for Receive
 
+  // How to instantiate specific object?
+  class Person(name: String) extends Actor {
+    override def receive: Receive = {
+      case "hi" => println(s"Hello, my name is $name")
+      case _ =>
+    }
+  }
+  val person = actorSystem.actorOf(Props(new Person("Bob")))
+  person ! "hi" // responds with "Hello, my name is Bob
+  person ! "sdgsf"
+
 }
