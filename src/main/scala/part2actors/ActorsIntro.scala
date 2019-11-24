@@ -58,4 +58,12 @@ object ActorsIntro extends App {
   person ! "hi" // responds with "Hello, my name is Bob
   person ! "sdgsf"
 
+  // The above is legal, but bad practice. Below is best practice.
+  object Person {
+    // Factory method creates new Prop for us
+    def props(name: String) = Props(new Person(name))
+  }
+  val person2 = actorSystem.actorOf(Person.props("Alice"))
+  person2 ! "hi"
+
 }
