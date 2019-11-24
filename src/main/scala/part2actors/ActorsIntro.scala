@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorSystem}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
 object ActorsIntro extends App {
 
@@ -28,5 +28,9 @@ object ActorsIntro extends App {
       case msg => println(s"[word counter] I cannot understand ${msg.toString}")
     }
   }
+
+  // Part 3 - Instantiate an Actor
+
+  val wordCounter: ActorRef = actorSystem.actorOf(Props[WordCountActor], "wordCounter")
 
 }
