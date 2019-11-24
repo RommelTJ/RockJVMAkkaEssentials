@@ -23,7 +23,7 @@ object ActorsIntro extends App {
     var totalWords = 0
 
     // behavior
-    override def receive: PartialFunction[Any, Unit] = {
+    override def receive: Receive = {
       case message: String =>
         println(s"[word counter] I have received $message")
         totalWords += message.split(" ").length
@@ -43,5 +43,8 @@ object ActorsIntro extends App {
 
   // Sending this message is asynchronous
   anotherWordCounter ! "A different message"
+
+  // the "!" is called "tell"
+  // PartialFunction[Any, Unit] is an alias for Receive
 
 }
