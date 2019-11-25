@@ -18,6 +18,10 @@ object ActorCapabilities extends App {
   simpleActor ! "hello, actor"
 
   // 1 - messages can be of any type
+  // Rules:
+  // a) Messages must be IMMUTABLE
+  // b) Messages must be SERIALIZABLE
+  // In practice, just use case classes and case objects.
   simpleActor ! 42
   case class SpecialMessage(contents: String)
   simpleActor ! SpecialMessage("Some special content")
