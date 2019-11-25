@@ -6,9 +6,10 @@ object ActorCapabilities extends App {
 
   class SimpleActor extends Actor {
     override def receive: Receive = {
-      case message: String => println(s"[simple actor] I have received $message")
-      case number: Int => println(s"[simple actor] I have received a number: $number")
+      case message: String => println(s"[${context.self.path.name}] I have received $message")
+      case number: Int => println(s"[${self.path.name}] I have received a number: $number")
       case SpecialMessage(contents) =>  println(s"[simple actor] I have received something special: $contents")
+      case SendMessageToYourself(content) => self ! content
     }
   }
 
@@ -25,5 +26,10 @@ object ActorCapabilities extends App {
   simpleActor ! 42
   case class SpecialMessage(contents: String)
   simpleActor ! SpecialMessage("Some special content")
+
+  // 2 - Actors have information about their context and about themselves.
+  // context.self is the equivalent to "this" in OOP.
+  case class SendMessageToYourself(content: String)
+  simpleActor ! SendMessageToYourself("I am an actor and I am proud of it.")
 
 }
