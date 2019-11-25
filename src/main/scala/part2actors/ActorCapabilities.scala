@@ -8,6 +8,7 @@ object ActorCapabilities extends App {
     override def receive: Receive = {
       case message: String => println(s"[simple actor] I have received $message")
       case number: Int => println(s"[simple actor] I have received a number: $number")
+      case SpecialMessage(contents) =>  println(s"[simple actor] I have received something special: $contents")
     }
   }
 
@@ -18,5 +19,7 @@ object ActorCapabilities extends App {
 
   // 1 - messages can be of any type
   simpleActor ! 42
+  case class SpecialMessage(contents: String)
+  simpleActor ! SpecialMessage("Some special content")
 
 }
