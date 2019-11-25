@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorSystem}
+import akka.actor.{Actor, ActorSystem, Props}
 
 object ActorCapabilities extends App {
 
@@ -11,5 +11,8 @@ object ActorCapabilities extends App {
   }
 
   val system = ActorSystem("actorCapabilitiesDemo")
+
+  val simpleActor = system.actorOf(Props[SimpleActor], "simpleActor")
+  simpleActor ! "hello, actor"
 
 }
