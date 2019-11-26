@@ -41,4 +41,6 @@ object ActorCapabilities extends App {
   case class SayHiTo(ref: ActorRef)
   alice ! SayHiTo(bob)
 
+  // 4 - Dead Letters. The Garbage Pool of Akka.
+  alice ! "Hi!" // reply to me, but I am null. Message to Actor from Actor was not delivered. Dead Letters.
 }
