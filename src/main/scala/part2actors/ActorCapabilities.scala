@@ -12,6 +12,7 @@ object ActorCapabilities extends App {
       case SpecialMessage(contents) =>  println(s"[simple actor] I have received something special: $contents")
       case SendMessageToYourself(content) => self ! content
       case SayHiTo(ref) => ref ! "Hi!"
+      case WirelessPhoneMessage(content, ref) => ref forward (content + "s") // I keep the original sender of the wireless phone message
     }
   }
 
@@ -43,4 +44,10 @@ object ActorCapabilities extends App {
 
   // 4 - Dead Letters. The Garbage Pool of Akka.
   alice ! "Hi!" // reply to me, but I am null. Message to Actor from Actor was not delivered. Dead Letters.
+
+  // 5 - Forwarding Messages. Sending a message with the ORIGINAL sender.
+  // D -> A -> B
+  case class WirelessPhoneMessage(content: String, ref: ActorRef)
+  alice ! WirelessPhoneMessage("Hi", bob)
+
 }
