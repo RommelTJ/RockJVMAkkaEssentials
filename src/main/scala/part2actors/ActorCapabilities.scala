@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
 object ActorCapabilities extends App {
 
@@ -10,6 +10,7 @@ object ActorCapabilities extends App {
       case number: Int => println(s"[${self.path.name}] I have received a number: $number")
       case SpecialMessage(contents) =>  println(s"[simple actor] I have received something special: $contents")
       case SendMessageToYourself(content) => self ! content
+      case SayHiTo(ref) => ref ! "Hi!"
     }
   }
 
@@ -31,5 +32,12 @@ object ActorCapabilities extends App {
   // context.self is the equivalent to "this" in OOP.
   case class SendMessageToYourself(content: String)
   simpleActor ! SendMessageToYourself("I am an actor and I am proud of it.")
+
+  // 3 - How actors can REPLY to messages
+  val alice = system.actorOf(Props[SimpleActor], "alice")
+  val bob = system.actorOf(Props[SimpleActor], "bob")
+
+  case class SayHiTo(ref: ActorRef)
+  alice ! SayHiTo(bob)
 
 }
