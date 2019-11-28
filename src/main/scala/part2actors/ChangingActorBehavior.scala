@@ -76,4 +76,12 @@ object ChangingActorBehavior extends App {
 
   mom ! MomStart(statelessFuzzyKid)
 
+  /*
+  Notes:
+  mom receives MomStart
+  - kid receives Food(veg) -> kid will change handler to sadReceive
+  - kid receives Ask(play?) -> kid replies with sadReceive handler
+  - mom receives KidReject
+   */
+
 }
