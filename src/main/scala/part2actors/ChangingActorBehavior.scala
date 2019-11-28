@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, ActorSystem}
 
 object ChangingActorBehavior extends App {
 
@@ -46,5 +46,7 @@ object ChangingActorBehavior extends App {
     val VEGETABLE = "veggies"
     val CHOCOLATE = "chocolate"
   }
+
+  val system = ActorSystem("changingActorBehaviorDemo")
 
 }
