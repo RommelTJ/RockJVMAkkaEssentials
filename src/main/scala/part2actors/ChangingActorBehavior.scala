@@ -6,11 +6,18 @@ object ChangingActorBehavior extends App {
 
   class FuzzyKid extends Actor {
     import FuzzyKid._
+    import Mom._
 
     // internal state of the kid
-    var state = HAPPY
+    var state: String = HAPPY
 
-    override def receive: Receive = ???
+    override def receive: Receive = {
+      case Food(VEGETABLE) => state = SAD
+      case Food(CHOCOLATE) => state = HAPPY
+      case Ask(message) =>
+        if (state == HAPPY) sender() ! KidAccept
+        else sender() ! KidReject
+    }
   }
   object FuzzyKid {
     case object KidAccept
