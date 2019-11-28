@@ -27,6 +27,10 @@ object ChangingActorBehavior extends App {
     val SAD = "sad"
   }
 
+  class StatelessFuzzyKid extends Actor {
+    override def receive: Receive = ???
+  }
+
   class Mom extends Actor {
     import Mom._
     import FuzzyKid._
