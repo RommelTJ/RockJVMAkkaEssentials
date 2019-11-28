@@ -27,7 +27,17 @@ object ChangingActorBehavior extends App {
   }
 
   class Mom extends Actor {
-    override def receive: Receive = ???
+    import Mom._
+    import FuzzyKid._
+
+    override def receive: Receive = {
+      case MomStart(kid) =>
+        // test our interaction
+        kid ! Food(VEGETABLE)
+        kid ! Ask("Do you want to play?")
+      case KidAccept => println("Yay! My kid is happy!")
+      case KidReject => println("My kid is sad, but at least he's healthy!")
+    }
   }
   object Mom {
     case class MomStart(kid: ActorRef)
