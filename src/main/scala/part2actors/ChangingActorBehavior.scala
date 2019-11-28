@@ -11,5 +11,8 @@ object ChangingActorBehavior extends App {
   class Mom extends Actor {
     override def receive: Receive = ???
   }
+  object Mom {
+    case class Food(food: String)
+  }
 
 }
