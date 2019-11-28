@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorRef, ActorSystem}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
 object ChangingActorBehavior extends App {
 
@@ -48,5 +48,8 @@ object ChangingActorBehavior extends App {
   }
 
   val system = ActorSystem("changingActorBehaviorDemo")
+  val fuzzyKid = system.actorOf(Props[FuzzyKid], "fuzzyKid")
+  val mom = system.actorOf(Props[Mom], "mom")
+
 
 }
