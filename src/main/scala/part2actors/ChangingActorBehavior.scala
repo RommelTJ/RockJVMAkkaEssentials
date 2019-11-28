@@ -10,6 +10,8 @@ object ChangingActorBehavior extends App {
   object FuzzyKid {
     case object KidAccept
     case object KidReject
+    val HAPPY = "happy"
+    val SAD = "sad"
   }
 
   class Mom extends Actor {
