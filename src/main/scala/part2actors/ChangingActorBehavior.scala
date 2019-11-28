@@ -5,6 +5,11 @@ import akka.actor.Actor
 object ChangingActorBehavior extends App {
 
   class FuzzyKid extends Actor {
+    import FuzzyKid._
+
+    // internal state of the kid
+    var state = HAPPY
+
     override def receive: Receive = ???
   }
   object FuzzyKid {
