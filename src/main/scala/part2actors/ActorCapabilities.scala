@@ -50,4 +50,21 @@ object ActorCapabilities extends App {
   case class WirelessPhoneMessage(content: String, ref: ActorRef)
   alice ! WirelessPhoneMessage("Hi", bob)
 
+  /**
+   * Exercises
+   * 1. Create a Counter Actor
+   * - Increment
+   * - Decrement
+   * - Print
+   *
+   * 2. Create a Bank Account as an Actor
+   * Receives
+   * - Deposit an amount
+   * - Withdraw an Amount
+   * - Statement
+   * Replies
+   * - Reply with Success/Failure
+   * Interact with some other kind of actor
+   */
+
 }
