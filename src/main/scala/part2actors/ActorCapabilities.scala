@@ -1,6 +1,8 @@
 package part2actors
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import part2actors.ActorCapabilities.BankAccountActor.AccountDeposit
+import part2actors.ActorCapabilities.Person.LiveTheLife
 
 object ActorCapabilities extends App {
 
@@ -112,7 +114,7 @@ object ActorCapabilities extends App {
           accountBalance -= num
           sender() ! AccountTransactionSuccess(s"Successfully withdrew $$$num")
         }
-      case AccountStatement => s"Your Account Balance is: $$${accountBalance}"
+      case AccountStatement => sender() ! s"Your Account Balance is: $$${accountBalance}"
     }
   }
   object BankAccountActor {
@@ -122,9 +124,26 @@ object ActorCapabilities extends App {
     case class AccountTransactionSuccess(message: String)
     case class AccountTransactionFailure(message: String)
   }
+
+  class Person extends Actor {
+    import Person._
+    import BankAccountActor._
+
+    override def receive: Receive = {
+      case LiveTheLife(account) =>
+        account ! AccountDeposit(10000)
+        account ! AccountWithdraw(90000)
+        account ! AccountWithdraw(500)
+        account ! AccountStatement
+      case message => println(message.toString)
+    }
+  }
+  object Person {
+    case class LiveTheLife(account: ActorRef)
+  }
+
   val bankAccountActor = bankAccountSystem.actorOf(Props[BankAccountActor], "bankAccountActor")
-  bankAccountActor ! BankAccountActor.AccountDeposit(500)
-  bankAccountActor ! BankAccountActor.AccountWithdraw(20)
-  bankAccountActor ! BankAccountActor.AccountStatement
+  val personActor = bankAccountSystem.actorOf(Props[Person], "person")
+  personActor ! LiveTheLife(bankAccountActor)
 
 }
