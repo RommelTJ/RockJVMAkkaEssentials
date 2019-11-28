@@ -30,6 +30,7 @@ object ChangingActorBehavior extends App {
     override def receive: Receive = ???
   }
   object Mom {
+    case object MomStart
     case class Food(food: String)
     case class Ask(message: String) // do you want to play?
     val VEGETABLE = "veggies"
