@@ -67,4 +67,25 @@ object ActorCapabilities extends App {
    * Interact with some other kind of actor
    */
 
+  val counterSystem = ActorSystem("counterSystem")
+  case class CounterIncrement(value: Int)
+  case class CounterDecrement(value: Int)
+  case class CounterPrint()
+
+  class CounterActor extends Actor {
+    var count: Int = 0
+    override def receive: Receive = {
+      case CounterIncrement(num) => count += num
+      case CounterDecrement(num) => count -= num
+      case CounterPrint => println(s"Count is $count")
+    }
+  }
+  val counterActor = counterSystem.actorOf(Props[CounterActor], "counterActor")
+  counterActor ! CounterIncrement(1)
+  counterActor ! CounterIncrement(2)
+  counterActor ! CounterIncrement(3)
+  counterActor ! CounterPrint
+  counterActor ! CounterDecrement(2)
+  counterActor ! CounterPrint
+
 }
