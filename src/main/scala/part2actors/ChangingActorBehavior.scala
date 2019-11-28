@@ -28,9 +28,17 @@ object ChangingActorBehavior extends App {
   }
 
   class StatelessFuzzyKid extends Actor {
+    import FuzzyKid._
+    import Mom._
+
     override def receive: Receive = ???
 
-    def happyReceive: Receive = ???
+    def happyReceive: Receive = {
+      case Food(VEGETABLE) => // change my receive handler to sadReceive
+      case Food(CHOCOLATE) =>
+      case Ask(_) => sender() ! KidAccept
+    }
+
     def sadReceive: Receive = ???
   }
 
