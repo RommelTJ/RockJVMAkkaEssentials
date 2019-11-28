@@ -67,9 +67,8 @@ object ActorCapabilities extends App {
    * Interact with some other kind of actor
    */
 
+  // Exercise 1
   val counterSystem = ActorSystem("counterSystem")
-
-
   class CounterActor extends Actor {
     import CounterActor._
     var count: Int = 0
@@ -92,5 +91,27 @@ object ActorCapabilities extends App {
   counterActor ! CounterActor.CounterPrint
   counterActor ! CounterActor.CounterDecrement(2)
   counterActor ! CounterActor.CounterPrint
+
+  // Exercise 2
+  val bankAccountSystem = ActorSystem("bankAccountSystem")
+  class BankAccountActor extends Actor {
+    import BankAccountActor._
+    var accountBalance: Int = 0
+
+    override def receive: Receive = {
+      case AccountDeposit(num) => accountBalance += num
+      case AccountWithdraw(num) => accountBalance -= num
+      case AccountStatement => println(s"Your Account Balance is: $$${accountBalance}")
+    }
+  }
+  object BankAccountActor {
+    case class AccountDeposit(amount: Int)
+    case class AccountWithdraw(amount: Int)
+    case object AccountStatement
+  }
+  val bankAccountActor = bankAccountSystem.actorOf(Props[BankAccountActor], "bankAccountActor")
+  bankAccountActor ! BankAccountActor.AccountDeposit(500)
+  bankAccountActor ! BankAccountActor.AccountWithdraw(20)
+  bankAccountActor ! BankAccountActor.AccountStatement
 
 }
