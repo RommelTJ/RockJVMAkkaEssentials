@@ -74,8 +74,6 @@ object ChangingActorBehavior extends App {
   val statelessFuzzyKid = system.actorOf(Props[StatelessFuzzyKid], "statelessFuzzyKid")
   val mom = system.actorOf(Props[Mom], "mom")
 
-  mom ! MomStart(fuzzyKid)
-  println("-----")
   mom ! MomStart(statelessFuzzyKid)
 
 }
