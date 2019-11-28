@@ -14,7 +14,7 @@ object ChangingActorBehavior extends App {
     override def receive: Receive = {
       case Food(VEGETABLE) => state = SAD
       case Food(CHOCOLATE) => state = HAPPY
-      case Ask(message) =>
+      case Ask(_) =>
         if (state == HAPPY) sender() ! KidAccept
         else sender() ! KidReject
     }
