@@ -29,6 +29,9 @@ object ChangingActorBehavior extends App {
 
   class StatelessFuzzyKid extends Actor {
     override def receive: Receive = ???
+
+    def happyReceive: Receive = ???
+    def sadReceive: Receive = ???
   }
 
   class Mom extends Actor {
