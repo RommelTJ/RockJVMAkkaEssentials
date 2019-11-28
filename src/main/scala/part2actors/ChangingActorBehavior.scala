@@ -39,7 +39,11 @@ object ChangingActorBehavior extends App {
       case Ask(_) => sender() ! KidAccept
     }
 
-    def sadReceive: Receive = ???
+    def sadReceive: Receive = {
+      case Food(VEGETABLE) =>
+      case Food(CHOCOLATE) => // change my receive handler to happyReceive
+      case Ask(_) => sender() ! KidReject
+    }
   }
 
   class Mom extends Actor {
