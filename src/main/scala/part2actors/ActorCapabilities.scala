@@ -68,11 +68,10 @@ object ActorCapabilities extends App {
    */
 
   val counterSystem = ActorSystem("counterSystem")
-  case class CounterIncrement(value: Int)
-  case class CounterDecrement(value: Int)
-  case class CounterPrint()
+
 
   class CounterActor extends Actor {
+    import CounterActor._
     var count: Int = 0
     override def receive: Receive = {
       case CounterIncrement(num) => count += num
@@ -80,12 +79,18 @@ object ActorCapabilities extends App {
       case CounterPrint => println(s"Count is $count")
     }
   }
+  // Domain of Counter
+  object CounterActor {
+    case class CounterIncrement(value: Int)
+    case class CounterDecrement(value: Int)
+    case object CounterPrint
+  }
   val counterActor = counterSystem.actorOf(Props[CounterActor], "counterActor")
-  counterActor ! CounterIncrement(1)
-  counterActor ! CounterIncrement(2)
-  counterActor ! CounterIncrement(3)
-  counterActor ! CounterPrint
-  counterActor ! CounterDecrement(2)
-  counterActor ! CounterPrint
+  counterActor ! CounterActor.CounterIncrement(1)
+  counterActor ! CounterActor.CounterIncrement(2)
+  counterActor ! CounterActor.CounterIncrement(3)
+  counterActor ! CounterActor.CounterPrint
+  counterActor ! CounterActor.CounterDecrement(2)
+  counterActor ! CounterActor.CounterPrint
 
 }
