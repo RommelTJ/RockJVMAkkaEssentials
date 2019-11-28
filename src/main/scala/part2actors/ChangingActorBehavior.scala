@@ -1,6 +1,7 @@
 package part2actors
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import part2actors.ChangingActorBehavior.Mom.MomStart
 
 object ChangingActorBehavior extends App {
 
@@ -51,5 +52,6 @@ object ChangingActorBehavior extends App {
   val fuzzyKid = system.actorOf(Props[FuzzyKid], "fuzzyKid")
   val mom = system.actorOf(Props[Mom], "mom")
 
+  mom ! MomStart(fuzzyKid)
 
 }
