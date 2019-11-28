@@ -99,15 +99,28 @@ object ActorCapabilities extends App {
     var accountBalance: Int = 0
 
     override def receive: Receive = {
-      case AccountDeposit(num) => accountBalance += num
-      case AccountWithdraw(num) => accountBalance -= num
-      case AccountStatement => println(s"Your Account Balance is: $$${accountBalance}")
+      case AccountDeposit(num) =>
+        if (num < 0) sender() ! AccountTransactionFailure("Invalid Deposit Amount")
+        else {
+          accountBalance += num
+          sender() ! AccountTransactionSuccess(s"Successfully deposited $$$num")
+        }
+      case AccountWithdraw(num) =>
+        if (num < 0) sender() ! AccountTransactionFailure("Invalid Withdraw Amount")
+        else if (num > accountBalance) sender() ! AccountTransactionFailure("Insufficient funds")
+        else {
+          accountBalance -= num
+          sender() ! AccountTransactionSuccess(s"Successfully withdrew $$$num")
+        }
+      case AccountStatement => s"Your Account Balance is: $$${accountBalance}"
     }
   }
   object BankAccountActor {
     case class AccountDeposit(amount: Int)
     case class AccountWithdraw(amount: Int)
     case object AccountStatement
+    case class AccountTransactionSuccess(message: String)
+    case class AccountTransactionFailure(message: String)
   }
   val bankAccountActor = bankAccountSystem.actorOf(Props[BankAccountActor], "bankAccountActor")
   bankAccountActor ! BankAccountActor.AccountDeposit(500)
