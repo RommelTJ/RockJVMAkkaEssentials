@@ -85,9 +85,14 @@ object ChangingActorBehavior extends App {
    */
 
   /*
-  Assume you sent:
-  Food(veg) -> message handler turns to sadReceive
-  Food(chocolate) -> message handler turns to happyReceive
+  Assume you sent (using discardOld = false)
+  Food(veg) -> stack.push(sadReceive)
+  Food(chocolate) -> stack.push(happyReceive)
+
+  Stack:
+  1. happyReceive
+  2. sadReceive
+  3. happyReceive
    */
 
 }
