@@ -54,6 +54,8 @@ object ChangingActorBehavior extends App {
       case MomStart(kid) =>
         // test our interaction
         kid ! Food(VEGETABLE)
+        kid ! Food(VEGETABLE)
+        kid ! Food(CHOCOLATE)
         kid ! Ask("Do you want to play?")
       case KidAccept => println("Yay! My kid is happy!")
       case KidReject => println("My kid is sad, but at least he's healthy!")
