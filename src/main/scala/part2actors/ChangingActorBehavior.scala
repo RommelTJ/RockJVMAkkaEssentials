@@ -35,7 +35,7 @@ object ChangingActorBehavior extends App {
 
     def happyReceive: Receive = {
       case Food(VEGETABLE) =>
-        context.become(sadReceive) // change my receive handler to sadReceive
+        context.become(sadReceive, false) // change my receive handler to sadReceive
       case Food(CHOCOLATE) => // stay happy
       case Ask(_) => sender() ! KidAccept
     }
@@ -43,7 +43,7 @@ object ChangingActorBehavior extends App {
     def sadReceive: Receive = {
       case Food(VEGETABLE) => // stay sad
       case Food(CHOCOLATE) =>
-        context.become(happyReceive) // change my receive handler to happyReceive
+        context.become(happyReceive, false) // change my receive handler to happyReceive
       case Ask(_) => sender() ! KidReject
     }
   }
@@ -82,6 +82,12 @@ object ChangingActorBehavior extends App {
   - kid receives Food(veg) -> kid will change handler to sadReceive
   - kid receives Ask(play?) -> kid replies with sadReceive handler
   - mom receives KidReject
+   */
+
+  /*
+  Assume you sent:
+  Food(veg) -> message handler turns to sadReceive
+  Food(chocolate) -> message handler turns to happyReceive
    */
 
 }
