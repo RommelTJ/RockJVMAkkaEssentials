@@ -18,8 +18,7 @@ object ChildActors extends App {
     }
 
     def withChild(childRef: ActorRef): Receive = {
-      case TellChild(message) =>
-        if (childRef != null) childRef forward message
+      case TellChild(message) => childRef forward message
     }
   }
   object Parent {
