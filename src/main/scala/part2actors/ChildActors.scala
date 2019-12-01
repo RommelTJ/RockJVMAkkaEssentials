@@ -42,4 +42,11 @@ object ChildActors extends App {
   // Parent -> Child -> Grandchild
   //        -> Child2
 
+  /*
+  Guardian Actors (top-level) Who owns parent? Guardian Actors.
+  - /system = system guardian
+  - /user = user-level guardian
+  - / = root-level guardian. Root guardian manages /system and /user.
+   */
+
 }
