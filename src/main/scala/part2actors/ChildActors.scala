@@ -83,8 +83,14 @@ object ChildActors extends App {
       case Withdraw(funds) => withdraw(funds)
     }
 
-    def deposit(funds: Int): Unit = amount += funds
-    def withdraw(funds: Int): Unit = amount -= funds
+    def deposit(funds: Int): Unit = {
+      println(s"${self.path} - Depositing $funds on top of $amount")
+      amount += funds
+    }
+    def withdraw(funds: Int): Unit = {
+      println(s"${self.path} - Withdrawing $funds from $amount")
+      amount -= funds
+    }
   }
   object NaiveBankAccount {
     case class Deposit(amount: Int)
