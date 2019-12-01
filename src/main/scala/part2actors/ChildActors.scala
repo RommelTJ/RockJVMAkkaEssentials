@@ -59,4 +59,12 @@ object ChildActors extends App {
   val invalidSelection: ActorSelection = system.actorSelection("/user/parent/dsfhdegj")
   invalidSelection ! "dfg" // Sent to dead-letters
 
+  /**
+   * Danger!
+   * NEVER PASS MUTABLE ACTOR STATE OR THE `THIS` REFERENCE TO CHILD ACTORS. NEVER IN YOUR LIFE.
+   * This has the danger of breaking actor encapsulation. Because child actor suddenly has access to the internals
+   * of the parent actor, so it can mutate the state or directly call methods of the parent actor without sending a
+   * message and this breaks our very sacred actor principles.
+   */
+
 }
