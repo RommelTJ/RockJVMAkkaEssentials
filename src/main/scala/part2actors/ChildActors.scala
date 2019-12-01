@@ -67,4 +67,8 @@ object ChildActors extends App {
    * message and this breaks our very sacred actor principles.
    */
 
+  class NaiveBankAccount extends Actor {
+    override def receive: Receive = ???
+  }
+
 }
