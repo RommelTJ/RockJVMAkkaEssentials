@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
 object ChildActors extends App {
 
@@ -31,5 +31,7 @@ object ChildActors extends App {
       case message => println(s"${self.path} - I got: $message")
     }
   }
+
+  val system = ActorSystem("ParentChildDemo")
 
 }
