@@ -108,4 +108,7 @@ object ChildActors extends App {
     case object CheckStatus
   }
 
+  // Testing Naive Bank Account and Credit Card
+  val bankAccountRef = system.actorOf(Props[NaiveBankAccount])
+
 }
