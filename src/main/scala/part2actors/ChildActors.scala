@@ -38,4 +38,8 @@ object ChildActors extends App {
   parent ! CreateChild("child1")
   parent ! TellChild("hey kid!")
 
+  // Actor hierarchies
+  // Parent -> Child -> Grandchild
+  //        -> Child2
+
 }
