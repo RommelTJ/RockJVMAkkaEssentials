@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSelection, ActorSystem, Props}
 import part2actors.ChildActors.Parent.{CreateChild, TellChild}
 
 object ChildActors extends App {
@@ -48,5 +48,10 @@ object ChildActors extends App {
   - /user = user-level guardian
   - / = root-level guardian. Root guardian manages /system and /user.
    */
+
+  /**
+   * Actor Selection
+   */
+  val childSelection: ActorSelection = system.actorSelection("/user/parent/child1")
 
 }
