@@ -128,4 +128,8 @@ object ChildActors extends App {
   // In practice, this behavior in which an actor's state suddenly becomes changed without the use of messages is
   // extremely, extremely hard to debug!
 
+  // Closing Over:
+  // Calling a method directly on an Actor instance. We never directly call methods on Actors. We only
+  // send messages. This happens when you use the 'this' reference or pass a mutable state actor reference.
+
 }
