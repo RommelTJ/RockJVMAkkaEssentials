@@ -81,5 +81,9 @@ object ChildActors extends App {
   class CreditCard extends Actor {
     override def receive: Receive = ???
   }
+  object CreditCard {
+    case class AttachToAccount(bankAccount: NaiveBankAccount) // This is questionable!!!
+    case object CheckStatus
+  }
 
 }
