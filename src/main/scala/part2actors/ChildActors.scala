@@ -1,6 +1,7 @@
 package part2actors
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import part2actors.ChildActors.Parent.{CreateChild, TellChild}
 
 object ChildActors extends App {
 
@@ -34,5 +35,7 @@ object ChildActors extends App {
 
   val system = ActorSystem("ParentChildDemo")
   val parent = system.actorOf(Props[Parent], "parent")
-  
+  parent ! CreateChild("child1")
+  parent ! TellChild("hey kid!")
+
 }
