@@ -124,4 +124,8 @@ object ChildActors extends App {
   val creditCardSelection = system.actorSelection("/user/account/card")
   creditCardSelection ! CheckStatus // Uh-oh! Called CheckStatus but withdrew 1 dollar.
 
+  // Wrong on so many levels!!!
+  // In practice, this behavior in which an actor's state suddenly becomes changed without the use of messages is
+  // extremely, extremely hard to debug!
+
 }
