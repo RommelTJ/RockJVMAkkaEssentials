@@ -53,5 +53,6 @@ object ChildActors extends App {
    * Actor Selection
    */
   val childSelection: ActorSelection = system.actorSelection("/user/parent/child1")
+  childSelection ! "Wut wut"
 
 }
