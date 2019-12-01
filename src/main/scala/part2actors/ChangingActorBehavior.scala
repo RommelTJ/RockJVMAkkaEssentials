@@ -110,6 +110,36 @@ object ChangingActorBehavior extends App {
   /**
    * Exercises
    * 1 - Recreate the CounterActor with context.become and no mutable state.
+   * 2 - Simplified voting system.
+   * -> Print the status of the votes. Map of candidate and number of votes they received.
+   * -> // Martin -> 1, Jonas -> 1, Roland -> 2
    */
+
+  // Exercise 2
+  case class Vote(candidate: String)
+  case object VoteStatusRequest
+  case class VoteStatusReply(candidate: Option[String])
+
+  class Citizen extends Actor {
+    override def receive: Receive = ???
+  }
+
+  case class AggregateVotes(citizens: Set[ActorRef])
+  class VoteAggregator extends Actor {
+    override def receive: Receive = ???
+  }
+
+  val alice = system.actorOf(Props[Citizen])
+  val bob = system.actorOf(Props[Citizen])
+  val charlie = system.actorOf(Props[Citizen])
+  val daniel = system.actorOf(Props[Citizen])
+
+  alice ! Vote("Martin")
+  bob ! Vote("Jonas")
+  charlie ! Vote("Roland")
+  daniel ! Vote("Roland")
+
+  val voteAggregator = system.actorOf(Props[VoteAggregator])
+  voteAggregator ! AggregateVotes(Set(alice, bob, charlie, daniel))
 
 }
