@@ -114,5 +114,6 @@ object ChildActors extends App {
   bankAccountRef ! InitializeAccount
 
   val creditCardSelection = system.actorSelection("/user/account/card")
+  creditCardSelection ! CheckStatus
 
 }
