@@ -68,7 +68,14 @@ object ChildActors extends App {
    */
 
   class NaiveBankAccount extends Actor {
+    import NaiveBankAccount._
+    
     override def receive: Receive = ???
+  }
+  object NaiveBankAccount {
+    case class Deposit(amount: Int)
+    case class Withdraw(amount: Int)
+    case object InitializeAccount
   }
 
 }
