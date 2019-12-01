@@ -69,8 +69,20 @@ object ChildActors extends App {
 
   class NaiveBankAccount extends Actor {
     import NaiveBankAccount._
+    import CreditCard._
 
-    override def receive: Receive = ???
+    var amount = 0
+
+    override def receive: Receive = {
+      case InitializeAccount =>
+        val creditCardRef = context.actorOf(Props[CreditCard])
+        creditCardRef ! AttachToAccount(this) // This is questionable!!!
+      case Deposit(funds) => deposit(funds)
+      case Withdraw(funds) => withdraw(funds)
+    }
+
+    def deposit(funds: Int): Unit = amount += funds
+    def withdraw(funds: Int): Unit = amount -= funds
   }
   object NaiveBankAccount {
     case class Deposit(amount: Int)
