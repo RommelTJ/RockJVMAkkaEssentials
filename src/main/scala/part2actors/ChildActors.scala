@@ -112,7 +112,7 @@ object ChildActors extends App {
   }
   object CreditCard {
     case class AttachToAccount(bankAccount: NaiveBankAccount) // This is questionable!!!
-    case object CheckStatus
+    case object CheckStatus // CheckStatus message should not be able to withdraw!
   }
 
   // Testing Naive Bank Account and Credit Card
@@ -122,6 +122,6 @@ object ChildActors extends App {
 
   Thread.sleep(500) // Making sure BankAccountRef is created.
   val creditCardSelection = system.actorSelection("/user/account/card")
-  creditCardSelection ! CheckStatus
+  creditCardSelection ! CheckStatus // Uh-oh! Called CheckStatus but withdrew 1 dollar.
 
 }
