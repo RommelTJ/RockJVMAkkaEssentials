@@ -33,5 +33,6 @@ object ChildActors extends App {
   }
 
   val system = ActorSystem("ParentChildDemo")
-
+  val parent = system.actorOf(Props[Parent], "parent")
+  
 }
