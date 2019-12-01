@@ -107,4 +107,9 @@ object ChangingActorBehavior extends App {
   1. happyReceive
    */
 
+  /**
+   * Exercises
+   * 1 - Recreate the CounterActor with context.become and no mutable state.
+   */
+
 }
