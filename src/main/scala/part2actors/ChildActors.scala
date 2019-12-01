@@ -1,6 +1,7 @@
 package part2actors
 
 import akka.actor.{Actor, ActorRef, ActorSelection, ActorSystem, Props}
+import part2actors.ChildActors.CreditCard.{AttachToAccount, CheckStatus}
 import part2actors.ChildActors.Parent.{CreateChild, TellChild}
 
 object ChildActors extends App {
@@ -91,7 +92,16 @@ object ChildActors extends App {
   }
 
   class CreditCard extends Actor {
-    override def receive: Receive = ???
+    override def receive: Receive = {
+      case AttachToAccount(account) => context.become(attachedTo(account))
+    }
+
+    def attachedTo(account: NaiveBankAccount): Receive = {
+      case CheckStatus =>
+        println(s"${self.path} - Your message has been processed.")
+        // Benign
+        account.withdraw(1) // Because I can.
+    }
   }
   object CreditCard {
     case class AttachToAccount(bankAccount: NaiveBankAccount) // This is questionable!!!
