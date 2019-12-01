@@ -55,4 +55,8 @@ object ChildActors extends App {
   val childSelection: ActorSelection = system.actorSelection("/user/parent/child1")
   childSelection ! "Wut wut"
 
+  // Invalid path
+  val invalidSelection: ActorSelection = system.actorSelection("/user/parent/dsfhdegj")
+  invalidSelection ! "dfg" // Sent to dead-letters
+
 }
