@@ -113,6 +113,7 @@ object ChildActors extends App {
   val bankAccountRef = system.actorOf(Props[NaiveBankAccount], "account")
   bankAccountRef ! InitializeAccount
 
+  Thread.sleep(500) // Making sure BankAccountRef is created.
   val creditCardSelection = system.actorSelection("/user/account/card")
   creditCardSelection ! CheckStatus
 
