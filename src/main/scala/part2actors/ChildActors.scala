@@ -131,5 +131,6 @@ object ChildActors extends App {
   // Closing Over:
   // Calling a method directly on an Actor instance. We never directly call methods on Actors. We only
   // send messages. This happens when you use the 'this' reference or pass a mutable state actor reference.
+  // Scala doesn't prevent this at compile time. Never close over mutable state or `this` reference.
 
 }
