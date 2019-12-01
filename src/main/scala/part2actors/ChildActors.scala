@@ -2,7 +2,7 @@ package part2actors
 
 import akka.actor.{Actor, ActorRef, ActorSelection, ActorSystem, Props}
 import part2actors.ChildActors.CreditCard.{AttachToAccount, CheckStatus}
-import part2actors.ChildActors.NaiveBankAccount.InitializeAccount
+import part2actors.ChildActors.NaiveBankAccount.{Deposit, InitializeAccount}
 import part2actors.ChildActors.Parent.{CreateChild, TellChild}
 
 object ChildActors extends App {
@@ -112,6 +112,7 @@ object ChildActors extends App {
   // Testing Naive Bank Account and Credit Card
   val bankAccountRef = system.actorOf(Props[NaiveBankAccount], "account")
   bankAccountRef ! InitializeAccount
+  bankAccountRef ! Deposit(100)
 
   Thread.sleep(500) // Making sure BankAccountRef is created.
   val creditCardSelection = system.actorSelection("/user/account/card")
