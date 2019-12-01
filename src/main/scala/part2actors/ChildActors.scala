@@ -2,6 +2,7 @@ package part2actors
 
 import akka.actor.{Actor, ActorRef, ActorSelection, ActorSystem, Props}
 import part2actors.ChildActors.CreditCard.{AttachToAccount, CheckStatus}
+import part2actors.ChildActors.NaiveBankAccount.InitializeAccount
 import part2actors.ChildActors.Parent.{CreateChild, TellChild}
 
 object ChildActors extends App {
@@ -110,5 +111,6 @@ object ChildActors extends App {
 
   // Testing Naive Bank Account and Credit Card
   val bankAccountRef = system.actorOf(Props[NaiveBankAccount])
+  bankAccountRef ! InitializeAccount
 
 }
