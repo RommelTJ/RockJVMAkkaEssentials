@@ -11,8 +11,8 @@ object ChildActorsExercise extends App {
   }
   object WordCounterMaster {
     case class Initialize(nChildren: Int)
-    case class WordCountTask(text: String)
-    case class WordCountReply(count: Int)
+    case class WordCountTask(/* TODO */text: String)
+    case class WordCountReply(/* TODO */count: Int)
   }
 
   class WordCounterWorker extends Actor {
@@ -34,5 +34,7 @@ object ChildActorsExercise extends App {
 
   // Round-robin logic
   // 1, 2, 3, 4, 5 and 7 tasks -> 1, 2, 3, 4, 5, 1, 2
+
+  // Hint: You might need to pass some extra information to WordCountTask and WordCountReply.
 
 }
