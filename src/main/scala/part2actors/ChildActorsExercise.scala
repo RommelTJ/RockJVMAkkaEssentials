@@ -9,6 +9,11 @@ object ChildActorsExercise extends App {
   class WordCounterMaster extends Actor {
     override def receive: Receive = ???
   }
+  object WordCounterMaster {
+    case class Initialize(nChildren: Int)
+    case class WordCountTask(text: String)
+    case class WordCountReply(count: Int)
+  }
 
   class WordCounterWorker extends Actor {
     override def receive: Receive = ???
