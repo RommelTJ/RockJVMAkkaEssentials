@@ -13,13 +13,17 @@ object ChildActorsExercise extends App {
     override def receive: Receive = {
       case Initialize(nChildren) =>
         println(s"[MASTER] Creating $nChildren children.")
-        for (n <- 1 to nChildren) {
-          context.actorOf(Props[WordCounterWorker], s"wcw$n")
-        }
+        val childrenRefs = for (n <- 1 to nChildren) yield context.actorOf(Props[WordCounterWorker], s"wcw$n")
+        context.become(withChildren(childrenRefs, 0))
     }
 
-    def withChild(childRef: ActorRef): Receive = {
-      case WordCountTask(task) => childRef forward task
+    def withChildren(childrenRefs: Seq[ActorRef], currentChildIndex: Int): Receive = {
+      case text: String =>
+        val task = WordCountTask(text)
+        val childRef = childrenRefs(currentChildIndex)
+        childRef ! task
+        val nextChildIndex = (currentChildIndex + 1) % childrenRefs.length
+        context.become(withChildren(childrenRefs, nextChildIndex))
     }
   }
 
