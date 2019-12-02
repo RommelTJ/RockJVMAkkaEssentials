@@ -32,4 +32,7 @@ object ChildActorsExercise extends App {
           r <- WCM <-
    */
 
+  // Round-robin logic
+  // 1, 2, 3, 4, 5 and 7 tasks -> 1, 2, 3, 4, 5, 1, 2
+
 }
