@@ -1,14 +1,28 @@
 package part2actors
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef, ActorSelection, ActorSystem, Props}
 
 object ChildActorsExercise extends App {
 
   // Distributed Word Counting
+  val system = ActorSystem("ChildActorsExercise")
 
   class WordCounterMaster extends Actor {
-    override def receive: Receive = ???
+    import WordCounterMaster._
+
+    override def receive: Receive = {
+      case Initialize(nChildren) =>
+        println(s"[MASTER] Creating $nChildren children.")
+        for (n <- 1 to nChildren) {
+          context.actorOf(Props[WordCounterWorker], s"wcw$n")
+        }
+    }
+
+    def withChild(childRef: ActorRef): Receive = {
+      case WordCountTask(task) => childRef forward task
+    }
   }
+
   object WordCounterMaster {
     case class Initialize(nChildren: Int)
     case class WordCountTask(/* TODO */text: String)
@@ -16,7 +30,12 @@ object ChildActorsExercise extends App {
   }
 
   class WordCounterWorker extends Actor {
-    override def receive: Receive = ???
+    import WordCounterMaster._
+
+    override def receive: Receive = {
+      case WordCountTask(task) => println(task)
+      case WordCountReply(count) => println(count)
+    }
   }
 
   /*
