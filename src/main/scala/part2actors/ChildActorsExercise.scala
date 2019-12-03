@@ -34,6 +34,9 @@ object ChildActorsExercise extends App {
         context.become(withChildren(childrenRefs, nextChildIndex, newTaskId, newRequestMap))
       case WordCountReply(id, count) =>
         // problem. Who should I send this to? Sender()? no. It should be the original requester of work.
+        val originalSender = requestMap(id)
+        originalSender ! count
+        context.become(withChildren(childrenRefs, currentChildIndex, currentTaskId, requestMap - id))
     }
   }
 
