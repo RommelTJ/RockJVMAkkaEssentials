@@ -89,4 +89,8 @@ object ChildActorsExercise extends App {
     }
   }
 
+  // Testing
+  val testActor = system.actorOf(Props[TestActor], "testActor")
+  testActor ! "go"
+
 }
