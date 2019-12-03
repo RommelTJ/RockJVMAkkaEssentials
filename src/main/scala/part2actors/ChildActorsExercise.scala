@@ -13,7 +13,7 @@ object ChildActorsExercise extends App {
     override def receive: Receive = {
       case Initialize(nChildren) =>
         println(s"[MASTER] Creating $nChildren children.")
-        val childrenRefs = for (n <- 1 to nChildren) yield context.actorOf(Props[WordCounterWorker], s"wcw$n")
+        val childrenRefs = for (n <- 0 until nChildren) yield context.actorOf(Props[WordCounterWorker], s"wcw$n")
         context.become(withChildren(childrenRefs, 0, 0, Map()))
     }
 
@@ -24,7 +24,7 @@ object ChildActorsExercise extends App {
       requestMap: Map[Int, ActorRef]
     ): Receive = {
       case text: String =>
-        println(s"[MASTER] I have received: $text. I will send it to child: $currentChildIndex")
+        println(s"[MASTER] I have received: $text. I will send it to child with ID: $currentChildIndex")
         val originalSender = sender()
         val task = WordCountTask(currentTaskId, text)
         val childRef = childrenRefs(currentChildIndex)
@@ -53,7 +53,7 @@ object ChildActorsExercise extends App {
 
     override def receive: Receive = {
       case WordCountTask(id, text) =>
-        println(s"[CHILD] ${self.path}: I have received a task with $id and $text")
+        println(s"[CHILD] ${self.path}: I have received a task with ID: $id and Text: $text")
         sender() ! WordCountReply(id, text.split(" ").length)
     }
   }
