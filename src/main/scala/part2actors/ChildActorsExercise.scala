@@ -76,4 +76,17 @@ object ChildActorsExercise extends App {
 
   // Hint: You might need to pass some extra information to WordCountTask and WordCountReply.
 
+  class TestActor extends Actor {
+    import WordCounterMaster._
+
+    override def receive: Receive = {
+      case "go" =>
+        val master = context.actorOf(Props[WordCounterMaster], "master")
+        master ! Initialize(3)
+        val texts = List("I love Akka.", "Scala is super dope", "yes", "me too")
+        texts.foreach(text => master ! text)
+      case count: Int => println(s"[TEST ACTOR] I received a reply with count: $count")
+    }
+  }
+
 }
