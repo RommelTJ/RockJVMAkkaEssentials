@@ -24,6 +24,7 @@ object ChildActorsExercise extends App {
       requestMap: Map[Int, ActorRef]
     ): Receive = {
       case text: String =>
+        println(s"[MASTER] I have received: $text. I will send it to child: $currentChildIndex")
         val originalSender = sender()
         val task = WordCountTask(currentTaskId, text)
         val childRef = childrenRefs(currentChildIndex)
@@ -34,6 +35,7 @@ object ChildActorsExercise extends App {
         context.become(withChildren(childrenRefs, nextChildIndex, newTaskId, newRequestMap))
       case WordCountReply(id, count) =>
         // problem. Who should I send this to? Sender()? no. It should be the original requester of work.
+        println(s"[MASTER] I have received a reply for task with ID #$id and the count is $count.")
         val originalSender = requestMap(id)
         originalSender ! count
         context.become(withChildren(childrenRefs, currentChildIndex, currentTaskId, requestMap - id))
@@ -50,7 +52,9 @@ object ChildActorsExercise extends App {
     import WordCounterMaster._
 
     override def receive: Receive = {
-      case WordCountTask(id, text) => sender() ! WordCountReply(id, text.split(" ").length)
+      case WordCountTask(id, text) =>
+        println(s"[CHILD] ${self.path}: I have received a task with $id and $text")
+        sender() ! WordCountReply(id, text.split(" ").length)
     }
   }
 
