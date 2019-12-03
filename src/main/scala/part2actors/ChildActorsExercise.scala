@@ -14,30 +14,40 @@ object ChildActorsExercise extends App {
       case Initialize(nChildren) =>
         println(s"[MASTER] Creating $nChildren children.")
         val childrenRefs = for (n <- 1 to nChildren) yield context.actorOf(Props[WordCounterWorker], s"wcw$n")
-        context.become(withChildren(childrenRefs, 0))
+        context.become(withChildren(childrenRefs, 0, 0, Map()))
     }
 
-    def withChildren(childrenRefs: Seq[ActorRef], currentChildIndex: Int): Receive = {
+    def withChildren(
+      childrenRefs: Seq[ActorRef],
+      currentChildIndex: Int,
+      currentTaskId: Int,
+      requestMap: Map[Int, ActorRef]
+    ): Receive = {
       case text: String =>
-        val task = WordCountTask(text)
+        val originalSender = sender()
+        val task = WordCountTask(currentTaskId, text)
         val childRef = childrenRefs(currentChildIndex)
         childRef ! task
         val nextChildIndex = (currentChildIndex + 1) % childrenRefs.length
-        context.become(withChildren(childrenRefs, nextChildIndex))
+        val newTaskId = currentTaskId + 1
+        val newRequestMap = requestMap + (currentTaskId -> originalSender)
+        context.become(withChildren(childrenRefs, nextChildIndex, newTaskId, newRequestMap))
+      case WordCountReply(id, count) =>
+        // problem. Who should I send this to? Sender()? no. It should be the original requester of work.
     }
   }
 
   object WordCounterMaster {
     case class Initialize(nChildren: Int)
-    case class WordCountTask(/* TODO */text: String)
-    case class WordCountReply(/* TODO */count: Int)
+    case class WordCountTask(id: Int, text: String)
+    case class WordCountReply(id: Int, count: Int)
   }
 
   class WordCounterWorker extends Actor {
     import WordCounterMaster._
 
     override def receive: Receive = {
-      case WordCountTask(text) => sender() ! WordCountReply(text.split(" ").length)
+      case WordCountTask(id, text) => sender() ! WordCountReply(id, text.split(" ").length)
     }
   }
 
