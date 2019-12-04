@@ -14,7 +14,7 @@ object ActorLogging extends App {
     }
   }
 
-  // Testing
+  // Testing Method 1
   val system = ActorSystem("LoggingDemo")
   val simpleActorWithExplicitLogger = system.actorOf(Props[SimpleActorWithExplicitLogger])
   simpleActorWithExplicitLogger ! "Logging a simple message"
@@ -25,5 +25,9 @@ object ActorLogging extends App {
       case message => log.info(message.toString)
     }
   }
+
+  // Testing Method 2
+  val actorWithLogging = system.actorOf(Props[ActorWithLogging])
+  actorWithLogging ! "Logging another simple message"
 
 }
