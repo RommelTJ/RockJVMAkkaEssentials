@@ -22,6 +22,7 @@ object ActorLogging extends App {
   // Method #2: Actor Logging
   class ActorWithLogging extends Actor with ActorLogging {
     override def receive: Receive = {
+      case (a, b) => log.info("Two things: {} and {}", a, b) // interpolating strings in logs
       case message => log.info(message.toString)
     }
   }
@@ -29,5 +30,6 @@ object ActorLogging extends App {
   // Testing Method 2
   val actorWithLogging = system.actorOf(Props[ActorWithLogging])
   actorWithLogging ! "Logging another simple message"
+  actorWithLogging ! ("One", 65)
 
 }
