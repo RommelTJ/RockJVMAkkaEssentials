@@ -29,4 +29,10 @@ object IntroAkkaConfig extends App {
   val defaultConfigActor = defaultConfigFileSystem.actorOf(Props[SimpleLoggingActor])
   defaultConfigActor ! "Remember me"
 
+  // Method 3 - Separate Configuration in same File
+  val specialConfig = ConfigFactory.load().getConfig("mySpecialConfig")
+  val specialConfigSystem = ActorSystem("SpecialConfigSystem", specialConfig)
+  val specialConfigActor = specialConfigSystem.actorOf(Props[SimpleLoggingActor])
+  specialConfigActor ! "I'm special"
+
 }
