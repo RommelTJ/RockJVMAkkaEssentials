@@ -44,4 +44,8 @@ object IntroAkkaConfig extends App {
   println(s"Separate JSON Config property: ${jsonConfig.getString("aJsonProperty")}")
   println(s"Separate JSON Config property: ${jsonConfig.getString("akka.loglevel")}")
 
+  val propsConfig = ConfigFactory.load("props/propsConfiguration.properties")
+  println(s"Separate JSON Properties property: ${propsConfig.getString("my.simpleProperty")}")
+  println(s"Separate JSON Properties property: ${propsConfig.getString("akka.loglevel")}")
+
 }
