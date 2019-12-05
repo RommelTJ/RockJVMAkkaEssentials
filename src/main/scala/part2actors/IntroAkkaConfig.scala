@@ -1,6 +1,6 @@
 package part2actors
 
-import akka.actor.{Actor, ActorLogging, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 
 object IntroAkkaConfig extends App {
@@ -20,7 +20,7 @@ object IntroAkkaConfig extends App {
       |""".stripMargin
   val config = ConfigFactory.parseString(configString)
   val system = ActorSystem("ConfigurationDemo", ConfigFactory.load(config))
-
-
+  val actor = system.actorOf(Props[SimpleLoggingActor])
+  actor ! "A message to remember"
 
 }
