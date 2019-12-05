@@ -39,4 +39,9 @@ object IntroAkkaConfig extends App {
   val separateConfig = ConfigFactory.load("secretFolder/secretConfiguration.conf")
   println(s"Separate Config Log Level: ${separateConfig.getString("akka.loglevel")}")
 
+  // Method 5 - Different File Formats (JSON, Properties)
+  val jsonConfig = ConfigFactory.load("json/jsonConfig.json")
+  println(s"Separate JSON Config property: ${jsonConfig.getString("aJsonProperty")}")
+  println(s"Separate JSON Config property: ${jsonConfig.getString("akka.loglevel")}")
+
 }
