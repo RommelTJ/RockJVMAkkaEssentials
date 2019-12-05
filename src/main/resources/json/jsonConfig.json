@@ -1,0 +1,6 @@
+{
+  "aJsonProperty": "MyProperty",
+  "akka": {
+    "loglevel": "DEBUG"
+  }
+}
