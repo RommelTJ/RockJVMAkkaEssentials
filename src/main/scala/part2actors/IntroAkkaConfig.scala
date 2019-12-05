@@ -35,4 +35,8 @@ object IntroAkkaConfig extends App {
   val specialConfigActor = specialConfigSystem.actorOf(Props[SimpleLoggingActor])
   specialConfigActor ! "I'm special"
 
+  // Method 4 - Separate Configuration in another file
+  val separateConfig = ConfigFactory.load("secretFolder/secretConfiguration.conf")
+  println(s"Separate Config Log Level: ${separateConfig.getString("akka.loglevel")}")
+
 }
