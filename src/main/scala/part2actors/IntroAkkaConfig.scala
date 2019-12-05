@@ -23,4 +23,10 @@ object IntroAkkaConfig extends App {
   val actor = system.actorOf(Props[SimpleLoggingActor])
   actor ! "A message to remember"
 
+  // Method 2 - File configuration (most common)
+  // By default, Akka looks at src > main > resources > application.conf
+  val defaultConfigFileSystem = ActorSystem("DefaultConfigFileSystem")
+  val defaultConfigActor = defaultConfigFileSystem.actorOf(Props[SimpleLoggingActor])
+  defaultConfigActor ! "Remember me"
+
 }
