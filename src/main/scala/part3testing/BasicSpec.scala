@@ -14,4 +14,10 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
     TestKit.shutdownActorSystem(system)
   }
 
+  "The thing being tested" should {
+    "do this" in {
+      // testing scenario
+    }
+  }
+
 }
