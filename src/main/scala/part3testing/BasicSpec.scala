@@ -53,4 +53,10 @@ object BasicSpec {
     override def receive: Receive = Actor.emptyBehavior
   }
 
+  class LabTestActor extends Actor {
+    override def receive: Receive = {
+      case message: String => sender() ! message.toUpperCase
+    }
+  }
+
 }
