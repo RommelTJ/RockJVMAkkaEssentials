@@ -25,6 +25,7 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       val msg = "hello, test"
       echoActor ! msg
       expectMsg(msg) // duration of waiting before failing can be configured with: akka.test.single-expect-default
+      testActor // passed implicitly and receives all our messages
     }
   }
 
