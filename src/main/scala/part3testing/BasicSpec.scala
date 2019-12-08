@@ -31,7 +31,7 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       val blackholeActor = system.actorOf(Props[BlackholeActor])
       val msg = "hello, test"
       blackholeActor ! msg
-      expectMsg(msg)
+      expectMsg(msg) // duration of waiting before failing can be configured with: akka.test.single-expect-default
     }
   }
 
