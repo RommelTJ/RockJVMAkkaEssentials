@@ -37,7 +37,7 @@ class TestProbeSpec extends TestKit(ActorSystem("TestProbeSpec"))
       slave.expectMsg(SlaveWork(workloadString, testActor))
       slave.reply(WorkCompleted(3, testActor)) // mocking the reply to master back
 
-      expectMsg(Report(3))
+      expectMsg(Report(3)) // testActor receives the Report(3) message.
     }
   }
 
