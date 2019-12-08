@@ -1,9 +1,9 @@
 package part3testing
 
-import akka.actor.ActorSystem
+import akka.actor.{Actor, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{BeforeAndAfterAll}
+import org.scalatest.BeforeAndAfterAll
 
 class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
   with ImplicitSender
@@ -25,4 +25,11 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
 
 object BasicSpec {
   // Use this to contain all the common and shared values to be used in the test.
+
+  class SimpleActor extends Actor {
+    override def receive: Receive = {
+      case message => sender() ! message
+    }
+  }
+
 }
