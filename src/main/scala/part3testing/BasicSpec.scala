@@ -58,6 +58,13 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       labTestActor ! "favoriteTech"
       expectMsgAllOf("Scala", "Akka")
     }
+
+    "reply with cool tech in a different way" in {
+      labTestActor ! "favoriteTech"
+      val messages = receiveN(2) // returns a Seq[Any]. If < 2, fail.
+      // free to do more complicated assertions
+      assert(messages.length == 2)
+    }
   }
 
 }
