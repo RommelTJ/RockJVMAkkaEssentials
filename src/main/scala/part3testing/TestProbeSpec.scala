@@ -20,7 +20,7 @@ class TestProbeSpec extends TestKit(ActorSystem("TestProbeSpec"))
     "register a slave" in {
       val master = system.actorOf(Props[Master])
       val slave = TestProbe("slave") // Special Actor with Assertion Capabilities
-      master ! Register
+      master ! Register(slave.ref)
     }
   }
 
@@ -42,6 +42,7 @@ object TestProbeSpec {
   case class SlaveWork(text: String, originalRequester: ActorRef)
   case class WorkCompleted(count: Int, originalRequester: ActorRef)
   case class Report(totalCount: Int)
+  case object RegistrationAck
 
   class Master extends Actor {
     override def receive: Receive = {
