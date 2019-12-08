@@ -36,4 +36,8 @@ object BasicSpec {
     }
   }
 
+  class BlackHole extends Actor {
+    override def receive: Receive = Actor.emptyBehavior
+  }
+
 }
