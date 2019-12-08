@@ -6,6 +6,8 @@ import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import part3testing.BasicSpec.SimpleActor
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
   with ImplicitSender
@@ -22,16 +24,16 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       val echoActor = system.actorOf(Props[SimpleActor])
       val msg = "hello, test"
       echoActor ! msg
-      expectMsg(msg)
+      expectMsg(msg) // duration of waiting before failing can be configured with: akka.test.single-expect-default
     }
   }
 
   "A black hole actor" should {
-    "send back some message" in {
+    "not send back some message" in {
       val blackholeActor = system.actorOf(Props[BlackholeActor])
       val msg = "hello, test"
       blackholeActor ! msg
-      expectMsg(msg) // duration of waiting before failing can be configured with: akka.test.single-expect-default
+      expectNoMessage(max = 1 second)
     }
   }
 
