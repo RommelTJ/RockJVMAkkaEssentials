@@ -5,7 +5,8 @@ import akka.testkit.TestActors.BlackholeActor
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
-import part3testing.BasicSpec.SimpleActor
+import part3testing.BasicSpec.{LabTestActor, SimpleActor}
+
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -35,6 +36,15 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       val msg = "hello, test"
       blackholeActor ! msg
       expectNoMessage(max = 1 second)
+    }
+  }
+
+  // Message Assertions
+  "A lab test actor" should {
+    val labTestActor = system.actorOf(Props[LabTestActor])
+    "turn a string into uppercase" in {
+      labTestActor ! "I love Akka"
+      expectMsg("I LOVE AKKA")
     }
   }
 
