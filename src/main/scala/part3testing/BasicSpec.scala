@@ -48,6 +48,11 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       val reply = expectMsgType[String]
       assert(reply == "I LOVE AKKA")
     }
+
+    "reply to a greeting" in {
+      labTestActor ! "greeting"
+      expectMsgAnyOf("hi", "hello")
+    }
   }
 
 }
