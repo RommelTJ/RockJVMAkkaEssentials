@@ -1,7 +1,7 @@
 package part3testing
 
-import akka.actor.{Actor, ActorRef, ActorSystem}
-import akka.testkit.{ImplicitSender, TestKit}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -12,6 +12,16 @@ class TestProbeSpec extends TestKit(ActorSystem("TestProbeSpec"))
 
   override def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
+  }
+
+  import TestProbeSpec._
+
+  "A master actor" should {
+    "register a slave" in {
+      val master = system.actorOf(Props[Master])
+      val slave = TestProbe("slave") // Special Actor with Assertion Capabilities
+      master ! Register
+    }
   }
 
 }
