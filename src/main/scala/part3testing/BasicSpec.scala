@@ -53,6 +53,11 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       labTestActor ! "greeting"
       expectMsgAnyOf("hi", "hello")
     }
+
+    "reply with favorite tech" in {
+      labTestActor ! "favoriteTech"
+      expectMsgAllOf("Scala", "Akka")
+    }
   }
 
 }
