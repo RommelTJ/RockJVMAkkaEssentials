@@ -47,7 +47,9 @@ object TestProbeSpec {
 
   class Master extends Actor {
     override def receive: Receive = {
-      case Register(slaveRef) => context.become(online(slaveRef, 0))
+      case Register(slaveRef) =>
+        sender() ! RegistrationAck
+        context.become(online(slaveRef, 0))
       case _ => // ignore
     }
 
