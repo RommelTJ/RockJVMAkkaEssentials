@@ -65,6 +65,14 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       // free to do more complicated assertions
       assert(messages.length == 2)
     }
+
+    "reply with cool tech in a fancy way" in {
+      labTestActor ! "favoriteTech"
+      expectMsgPF() {
+        case "Scala" => // only care that the Partial Function is defined
+        case "Akka" =>
+      }
+    }
   }
 
 }
