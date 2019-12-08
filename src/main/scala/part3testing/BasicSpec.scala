@@ -2,11 +2,12 @@ package part3testing
 
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestKit}
-import org.scalatest.{WordSpecLike, BeforeAndAfterAll}
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{BeforeAndAfterAll}
 
 class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
   with ImplicitSender
-  with WordSpecLike
+  with AnyWordSpecLike
   with BeforeAndAfterAll {
 
   // Setup
