@@ -1,9 +1,10 @@
 package part3testing
 
-import akka.actor.{Actor, ActorSystem}
+import akka.actor.{Actor, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
+import part3testing.BasicSpec.SimpleActor
 
 class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
   with ImplicitSender
@@ -15,9 +16,12 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
     TestKit.shutdownActorSystem(system)
   }
 
-  "The thing being tested" should {
-    "do this" in {
-      // testing scenario
+  "A simple actor" should {
+    "send back the same message" in {
+      val echoActor = system.actorOf(Props[SimpleActor])
+      val msg = "hello, test"
+      echoActor ! msg
+      expectMsg(msg)
     }
   }
 
