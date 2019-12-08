@@ -9,6 +9,7 @@ import part3testing.BasicSpec.{LabTestActor, SimpleActor}
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.util.Random
 
 class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
   with ImplicitSender
@@ -65,7 +66,9 @@ object BasicSpec {
   }
 
   class LabTestActor extends Actor {
+    val random = new Random()
     override def receive: Receive = {
+      case "greeting" => if (random.nextBoolean()) sender() ! "hi" else sender() ! "hello"
       case message: String => sender() ! message.toUpperCase
     }
   }
