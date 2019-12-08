@@ -1,6 +1,7 @@
 package part3testing
 
 import akka.actor.{Actor, ActorSystem, Props}
+import akka.testkit.TestActors.BlackholeActor
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
@@ -21,6 +22,15 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
       val echoActor = system.actorOf(Props[SimpleActor])
       val msg = "hello, test"
       echoActor ! msg
+      expectMsg(msg)
+    }
+  }
+
+  "A black hole actor" should {
+    "send back some message" in {
+      val blackholeActor = system.actorOf(Props[BlackholeActor])
+      val msg = "hello, test"
+      blackholeActor ! msg
       expectMsg(msg)
     }
   }
