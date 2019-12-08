@@ -23,6 +23,19 @@ class TestProbeSpec extends TestKit(ActorSystem("TestProbeSpec"))
       master ! Register(slave.ref)
       expectMsg(RegistrationAck)
     }
+
+    "send the work to the slave actor" in {
+      val master = system.actorOf(Props[Master])
+      val slave = TestProbe("slave")
+      master ! Register(slave.ref)
+      expectMsg(RegistrationAck)
+
+      val workloadString = "I love Akka"
+      master ! Work(workloadString)
+
+      // testActor is the originalRequester, because it's the sender of the work because it's the implicit sender in TestKit
+      slave.expectMsg(SlaveWork(workloadString, testActor))
+    }
   }
 
 }
