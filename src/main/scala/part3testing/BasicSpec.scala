@@ -21,3 +21,7 @@ class BasicSpec extends TestKit(ActorSystem("BasicSpec"))
   }
 
 }
+
+object BasicSpec {
+  // Use this to contain all the common and shared values to be used in the test.
+}
