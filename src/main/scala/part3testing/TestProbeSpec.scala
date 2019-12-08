@@ -21,6 +21,7 @@ class TestProbeSpec extends TestKit(ActorSystem("TestProbeSpec"))
       val master = system.actorOf(Props[Master])
       val slave = TestProbe("slave") // Special Actor with Assertion Capabilities
       master ! Register(slave.ref)
+      expectMsg(RegistrationAck)
     }
   }
 
