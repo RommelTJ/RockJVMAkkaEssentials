@@ -74,6 +74,9 @@ object BasicSpec {
     val random = new Random()
     override def receive: Receive = {
       case "greeting" => if (random.nextBoolean()) sender() ! "hi" else sender() ! "hello"
+      case "favoriteTech" =>
+        sender() ! "Scala"
+        sender() ! "Akka"
       case message: String => sender() ! message.toUpperCase
     }
   }
