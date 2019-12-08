@@ -35,6 +35,9 @@ class TestProbeSpec extends TestKit(ActorSystem("TestProbeSpec"))
 
       // testActor is the originalRequester, because it's the sender of the work because it's the implicit sender in TestKit
       slave.expectMsg(SlaveWork(workloadString, testActor))
+      slave.reply(WorkCompleted(3, testActor)) // mocking the reply to master back
+
+      expectMsg(Report(3))
     }
   }
 
