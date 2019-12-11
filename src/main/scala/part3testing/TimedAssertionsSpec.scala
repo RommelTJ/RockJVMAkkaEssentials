@@ -6,6 +6,7 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 import scala.concurrent.duration._
 import scala.util.Random
+import scala.language.postfixOps
 
 class TimedAssertionsSpec extends TestKit(ActorSystem("TimedAssertionsSpec"))
   with ImplicitSender
