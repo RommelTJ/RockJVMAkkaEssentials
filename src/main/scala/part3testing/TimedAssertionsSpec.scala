@@ -2,6 +2,7 @@ package part3testing
 
 import akka.actor.{Actor, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
+import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -9,8 +10,9 @@ import scala.concurrent.duration._
 import scala.util.Random
 import scala.language.postfixOps
 
-class TimedAssertionsSpec extends TestKit(ActorSystem("TimedAssertionsSpec"))
-  with ImplicitSender
+class TimedAssertionsSpec extends TestKit(
+  ActorSystem("TimedAssertionsSpec", ConfigFactory.load().getConfig("specialTimedAssertionsConfig"))
+) with ImplicitSender
   with AnyWordSpecLike
   with BeforeAndAfterAll {
 
@@ -42,9 +44,11 @@ class TimedAssertionsSpec extends TestKit(ActorSystem("TimedAssertionsSpec"))
     }
 
     "reply to a test probe in a timely manner" in {
-      val probe = TestProbe()
-      probe.send(workerActor, "work")
-      probe.expectMsg(WorkResult(42))
+      within(1 second) {
+        val probe = TestProbe()
+        probe.send(workerActor, "work")
+        probe.expectMsg(WorkResult(42)) // timeout of 0.3 seconds
+      }
     }
   }
 }
