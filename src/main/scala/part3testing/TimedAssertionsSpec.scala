@@ -1,9 +1,10 @@
 package part3testing
 
 import akka.actor.{Actor, ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestKit}
+import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
+
 import scala.concurrent.duration._
 import scala.util.Random
 import scala.language.postfixOps
@@ -38,6 +39,12 @@ class TimedAssertionsSpec extends TestKit(ActorSystem("TimedAssertionsSpec"))
         }
         assert(results.sum > 5)
       }
+    }
+
+    "reply to a test probe in a timely manner" in {
+      val probe = TestProbe()
+      probe.send(workerActor, "work")
+      probe.expectMsg(WorkResult(42))
     }
   }
 }
