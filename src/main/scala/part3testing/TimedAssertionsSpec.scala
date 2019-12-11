@@ -28,6 +28,17 @@ class TimedAssertionsSpec extends TestKit(ActorSystem("TimedAssertionsSpec"))
         expectMsg(WorkResult(42))
       }
     }
+
+    "reply with valid work at a reasonable cadence" in {
+      within(1 second) {
+        workerActor ! "workSequence"
+        // For up to 2 seconds, expect 10 messages at most 500 milliseconds apart.
+        val results: Seq[Int] = receiveWhile[Int](max = 2 seconds, idle = 500 millis, messages = 10) {
+          case WorkResult(result) => result
+        }
+        assert(results.sum == 10)
+      }
+    }
   }
 }
 
@@ -40,7 +51,7 @@ object TimedAssertionsSpec {
       case "work" =>
         // long computation
         Thread.sleep(500)
-        sender() !WorkResult(42)
+        sender() ! WorkResult(42)
       case "workSequence" =>
         // quick, many computations
         val r = new Random()
