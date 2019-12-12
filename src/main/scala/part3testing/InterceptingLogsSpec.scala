@@ -20,6 +20,7 @@ class InterceptingLogsSpec extends TestKit(
 
   val item = "Akka course"
   val creditCard = "1234-1234-1234-1234"
+  val invalidCreditCard = "0123-1234-1234-1234"
 
   "A checkout flow" should {
     "correctly log the dispatch of an order" in {
@@ -28,6 +29,13 @@ class InterceptingLogsSpec extends TestKit(
         // our test code
         val checkoutRef = system.actorOf(Props[CheckoutActor])
         checkoutRef ! Checkout(item, creditCard)
+      }
+    }
+
+    "freak out if the payment is denied" in {
+      EventFilter[RuntimeException](occurrences = 1) intercept {
+        val checkoutRef = system.actorOf(Props[CheckoutActor])
+        checkoutRef ! Checkout(item, invalidCreditCard)
       }
     }
   }
