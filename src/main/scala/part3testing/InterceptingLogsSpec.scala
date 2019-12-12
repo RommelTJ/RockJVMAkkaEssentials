@@ -42,7 +42,11 @@ object InterceptingLogsSpec {
   }
 
   class PaymentManager extends Actor {
-    override def receive: Receive = ???
+    override def receive: Receive = {
+      case AuthorizeCard(card) =>
+        if (card.startsWith("0")) sender() ! PaymentDenied
+        else sender() ! PaymentAccepted
+    }
   }
 
   class FulfillmentManager extends Actor {
