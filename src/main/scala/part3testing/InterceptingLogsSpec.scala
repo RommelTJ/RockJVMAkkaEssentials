@@ -59,7 +59,7 @@ object InterceptingLogsSpec {
       case PaymentAccepted =>
         fulfillmentManager ! DispatchOrder(item)
         context.become(pendingFulfillment(item))
-      case PaymentDenied => // TODO
+      case PaymentDenied => throw new RuntimeException("I can't handle this anymore")
     }
 
     def pendingFulfillment(item: String): Receive = {
