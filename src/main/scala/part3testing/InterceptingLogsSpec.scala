@@ -43,7 +43,9 @@ object InterceptingLogsSpec {
         context.become(pendingFulfillment(item))
     }
 
-    def pendingFulfillment(item: String): Receive = ???
+    def pendingFulfillment(item: String): Receive = {
+      case OrderConfirmed => context.become(awaitingCheckout)
+    }
   }
 
   class PaymentManager extends Actor {
