@@ -1,6 +1,6 @@
 package part3testing
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -57,11 +57,12 @@ object InterceptingLogsSpec {
     }
   }
 
-  class FulfillmentManager extends Actor {
+  class FulfillmentManager extends Actor with ActorLogging {
     var orderId = 0
     override def receive: Receive = {
       case DispatchOrder(item) =>
         orderId += 1
+        log.info(s"Order $orderId for item $item has been dispatched.")
         sender() ! OrderConfirmed
     }
   }
