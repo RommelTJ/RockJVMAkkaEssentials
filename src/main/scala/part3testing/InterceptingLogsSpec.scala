@@ -22,6 +22,8 @@ object InterceptingLogsSpec {
   case class AuthorizeCard(creditCard: String)
   case object PaymentAccepted
   case object PaymentDenied
+  case class DispatchOrder(item: String)
+  case object OrderConfirmed
 
   class CheckoutActor extends Actor {
     private val paymentManager = context.actorOf(Props[PaymentManager])
@@ -37,8 +39,11 @@ object InterceptingLogsSpec {
 
     def pendingPayment(item: String): Receive = {
       case PaymentAccepted =>
-      case PaymentDenied =>
+        fulfillmentManager ! DispatchOrder(item)
+        context.become(pendingFulfillment(item))
     }
+
+    def pendingFulfillment(item: String): Receive = ???
   }
 
   class PaymentManager extends Actor {
