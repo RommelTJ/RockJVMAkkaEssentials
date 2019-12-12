@@ -55,7 +55,12 @@ object InterceptingLogsSpec {
   }
 
   class FulfillmentManager extends Actor {
-    override def receive: Receive = ???
+    var orderId = 0
+    override def receive: Receive = {
+      case DispatchOrder(item) =>
+        orderId += 1
+        sender() ! OrderConfirmed
+    }
   }
 
 }
