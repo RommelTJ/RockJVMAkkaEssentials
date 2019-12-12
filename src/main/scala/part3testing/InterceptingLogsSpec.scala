@@ -1,6 +1,6 @@
 package part3testing
 
-import akka.actor.ActorSystem
+import akka.actor.{Actor, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -17,5 +17,9 @@ class InterceptingLogsSpec extends TestKit(ActorSystem("InterceptingLogsSpec"))
 }
 
 object InterceptingLogsSpec {
+
+  class CheckoutActor extends Actor {
+    override def receive: Receive = ???
+  }
 
 }
