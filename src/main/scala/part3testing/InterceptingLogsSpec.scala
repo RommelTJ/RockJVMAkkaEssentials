@@ -26,4 +26,8 @@ object InterceptingLogsSpec {
     override def receive: Receive = ???
   }
 
+  class FulfillmentManager extends Actor {
+    override def receive: Receive = ???
+  }
+
 }
