@@ -1,7 +1,7 @@
 package part3testing
 
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestKit}
+import akka.testkit.{EventFilter, ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -12,6 +12,22 @@ class InterceptingLogsSpec extends TestKit(ActorSystem("InterceptingLogsSpec"))
 
   override protected def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
+  }
+
+  import InterceptingLogsSpec._
+
+  val item = "Akka course"
+  val creditCard = "1234-1234-1234-1234"
+
+  "A checkout flow" should {
+    "correctly log the dispatch of an order" in {
+      // Event filter
+      EventFilter.info(pattern = s"Order [0-9]+ for item $item has been dispatched.", occurrences = 1) intercept {
+        // our test code
+        val checkoutRef = system.actorOf(Props[CheckoutActor])
+        checkoutRef ! Checkout(item, creditCard)
+      }
+    }
   }
 
 }
