@@ -6,4 +6,8 @@ object StartingStoppingActors extends App {
 
   val system = ActorSystem("StoppingActorsDemo")
 
+  class Parent extends Actor {
+    override def receive: Receive = ???
+  }
+
 }
