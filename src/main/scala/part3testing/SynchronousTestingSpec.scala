@@ -1,17 +1,27 @@
 package part3testing
 
-import akka.actor.{Actor, ActorSystem}
+import akka.actor.{Actor, ActorSystem, Props}
+import akka.testkit.TestActorRef
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
+import part3testing.SynchronousTestingSpec.{Counter, Inc, Read}
 
 class SynchronousTestingSpec extends AnyWordSpecLike with BeforeAndAfterAll {
 
-  val system = ActorSystem("SynchronousTestingSpec")
+  implicit val system = ActorSystem("SynchronousTestingSpec")
 
   override protected def afterAll(): Unit = {
     system.terminate()
   }
-  
+
+  "A counter" should {
+    "synchronously increase its counter" in {
+      val counter = TestActorRef[Counter](Props[Counter])
+      counter ! Inc // counter has ALREADY received the message
+      assert(counter.underlyingActor.count == 1)
+    }
+  }
+
 }
 
 object SynchronousTestingSpec {
