@@ -10,4 +10,8 @@ object StartingStoppingActors extends App {
     override def receive: Receive = ???
   }
 
+  class Child extends Actor {
+    override def receive: Receive = ???
+  }
+
 }
