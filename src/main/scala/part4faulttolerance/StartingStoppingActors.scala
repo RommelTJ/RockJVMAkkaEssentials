@@ -1,13 +1,20 @@
 package part4faulttolerance
 
-import akka.actor.{Actor, ActorLogging, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
 
 object StartingStoppingActors extends App {
 
   val system = ActorSystem("StoppingActorsDemo")
 
-  class Parent extends Actor {
-    override def receive: Receive = ???
+  class Parent extends Actor with ActorLogging {
+    import Parent._
+    override def receive: Receive = withChildren(children = Map())
+
+    def withChildren(children: Map[String, ActorRef]): Receive = {
+      case StartChild(name) =>
+        log.info(s"Starting child with name: $name")
+        context.become(withChildren(children + (name -> context.actorOf(Props[Child], name))))
+    }
   }
   object Parent {
     case class StartChild(name: String)
