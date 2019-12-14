@@ -1,6 +1,6 @@
 package part4faulttolerance
 
-import akka.actor.{Actor, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorSystem}
 
 object StartingStoppingActors extends App {
 
@@ -10,8 +10,10 @@ object StartingStoppingActors extends App {
     override def receive: Receive = ???
   }
 
-  class Child extends Actor {
-    override def receive: Receive = ???
+  class Child extends Actor with ActorLogging {
+    override def receive: Receive = {
+      case message => log.info(message.toString)
+    }
   }
 
 }
