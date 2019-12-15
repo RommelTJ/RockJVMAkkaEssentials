@@ -1,6 +1,6 @@
 package part4faulttolerance
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, PoisonPill, Props}
 
 object StartingStoppingActors extends App {
 
@@ -51,7 +51,15 @@ object StartingStoppingActors extends App {
   val child2 = system.actorSelection("/user/parent/child2")
   child2 ! "Hi, Second child!"
   parent ! Stop
-  for (i <- 1 to 10) parent ! s"[$i]Parent, are you still there?" // Are never received because Stop is sent first.
-  for (i <- 1 to 100) child2 ! s"[$i]Child, are you still there?" // Some are received.
+  // for (i <- 1 to 10) parent ! s"[$i]Parent, are you still there?" // Are never received because Stop is sent first.
+  // for (i <- 1 to 100) child2 ! s"[$i]Child, are you still there?" // Some are received.
+
+  /**
+   * Method #2 for stopping Actors - Using Special Messages
+   */
+  val looseActor = system.actorOf(Props[Child])
+  looseActor ! "Hello, loose actor"
+  looseActor ! PoisonPill
+  looseActor ! "Are you still there, loose actor?"
 
 }
