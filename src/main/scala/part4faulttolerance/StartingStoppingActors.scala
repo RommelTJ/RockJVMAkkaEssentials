@@ -39,5 +39,7 @@ object StartingStoppingActors extends App {
   child ! "Hi kid!"
 
   parent ! StopChild("child1")
+  // Note: Child stops asynchronously, so not immediately.
+  for (_ <- 1 to 50) child ! "are you still there?" // Will receive a few of those before DeadLetters.
 
 }
