@@ -67,4 +67,18 @@ object StartingStoppingActors extends App {
   abruptlyTerminatedActor ! Kill
   abruptlyTerminatedActor ! "abruptly still there?"
 
+  /**
+   * Death watch
+   */
+  class Watcher extends Actor with ActorLogging {
+    import Parent._
+
+    override def receive: Receive = {
+      case StartChild(name) =>
+        val child = context.actorOf(Props[Child], name)
+        log.info(s"Started and watching child with name: $name")
+        context.watch(child)
+    }
+  }
+
 }
