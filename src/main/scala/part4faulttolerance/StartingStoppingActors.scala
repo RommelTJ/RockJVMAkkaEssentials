@@ -57,15 +57,15 @@ object StartingStoppingActors extends App {
   /**
    * Method #2 for stopping Actors - Using Special Messages
    */
-  val looseActor = system.actorOf(Props[Child])
-  looseActor ! "Hello, loose actor"
-  looseActor ! PoisonPill
-  looseActor ! "Are you still there, loose actor?"
-
-  val abruptlyTerminatedActor = system.actorOf(Props[Child])
-  abruptlyTerminatedActor ! "hi, abruptly terminated actor"
-  abruptlyTerminatedActor ! Kill
-  abruptlyTerminatedActor ! "abruptly still there?"
+//  val looseActor = system.actorOf(Props[Child])
+//  looseActor ! "Hello, loose actor"
+//  looseActor ! PoisonPill
+//  looseActor ! "Are you still there, loose actor?"
+//
+//  val abruptlyTerminatedActor = system.actorOf(Props[Child])
+//  abruptlyTerminatedActor ! "hi, abruptly terminated actor"
+//  abruptlyTerminatedActor ! Kill
+//  abruptlyTerminatedActor ! "abruptly still there?"
 
   /**
    * Death watch
@@ -82,5 +82,11 @@ object StartingStoppingActors extends App {
         log.info(s"The reference that I'm watching $ref has been stopped.")
     }
   }
+
+  val watcher = system.actorOf(Props[Watcher], "watcher")
+  watcher ! StartChild("watchedChild")
+  val watchedChild = system.actorSelection("/user/watcher/watchedChild")
+  Thread.sleep(500)
+  watchedChild ! PoisonPill
 
 }
