@@ -1,6 +1,6 @@
 package part4faulttolerance
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, PoisonPill, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Kill, PoisonPill, Props}
 
 object StartingStoppingActors extends App {
 
@@ -61,5 +61,10 @@ object StartingStoppingActors extends App {
   looseActor ! "Hello, loose actor"
   looseActor ! PoisonPill
   looseActor ! "Are you still there, loose actor?"
+
+  val abruptlyTerminatedActor = system.actorOf(Props[Child])
+  abruptlyTerminatedActor ! "hi, abruptly terminated actor"
+  abruptlyTerminatedActor ! Kill
+  abruptlyTerminatedActor ! "abruptly still there?"
 
 }
