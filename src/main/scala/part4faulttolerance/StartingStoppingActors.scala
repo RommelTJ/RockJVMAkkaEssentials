@@ -1,6 +1,6 @@
 package part4faulttolerance
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Kill, PoisonPill, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Kill, PoisonPill, Props, Terminated}
 
 object StartingStoppingActors extends App {
 
@@ -78,6 +78,8 @@ object StartingStoppingActors extends App {
         val child = context.actorOf(Props[Child], name)
         log.info(s"Started and watching child with name: $name")
         context.watch(child)
+      case Terminated(ref) =>
+        log.info(s"The reference that I'm watching $ref has been stopped.")
     }
   }
 
