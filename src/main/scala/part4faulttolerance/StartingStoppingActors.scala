@@ -18,6 +18,9 @@ object StartingStoppingActors extends App {
         log.info(s"Stopping child with name: $name")
         val childOption = children.get(name)
         childOption.foreach(childRef => context.stop(childRef))
+      case Stop =>
+        log.info(s"Stopping myself")
+        context.stop(self)
     }
   }
   object Parent {
