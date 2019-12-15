@@ -38,4 +38,6 @@ object StartingStoppingActors extends App {
   val child = system.actorSelection("/user/parent/child1")
   child ! "Hi kid!"
 
+  parent ! StopChild("child1")
+
 }
