@@ -14,6 +14,10 @@ object StartingStoppingActors extends App {
       case StartChild(name) =>
         log.info(s"Starting child with name: $name")
         context.become(withChildren(children + (name -> context.actorOf(Props[Child], name))))
+      case StopChild(name) =>
+        log.info(s"Stopping child with name: $name")
+        val childOption = children.get(name)
+        childOption.foreach(childRef => context.stop(childRef))
     }
   }
   object Parent {
