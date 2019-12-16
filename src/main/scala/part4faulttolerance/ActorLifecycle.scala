@@ -20,4 +20,16 @@ object ActorLifecycle extends App {
   parent ! StartChild
   parent ! PoisonPill
 
+  /**
+   * Restart
+   */
+  object Fail
+  class Child extends Actor with ActorLogging {
+    override def receive: Receive = {
+      case Fail =>
+        log.info(s"child will fail now...")
+        throw new RuntimeException("I failed...")
+    }
+  }
+
 }
