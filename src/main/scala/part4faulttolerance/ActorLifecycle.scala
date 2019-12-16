@@ -34,6 +34,19 @@ object ActorLifecycle extends App {
   }
 
   class Child extends Actor with ActorLogging {
+
+    override def preStart(): Unit = log.info(s"Supervised child started...")
+
+    override def postStop(): Unit = log.info(s"Supervised child stopped...")
+
+    override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
+      log.info(s"supervised actor restarting because of ${reason.getMessage}")
+    }
+
+    override def postRestart(reason: Throwable): Unit = {
+      log.info(s"supervised actor restarted")
+    }
+
     override def receive: Receive = {
       case Fail =>
         log.info(s"child will fail now...")
