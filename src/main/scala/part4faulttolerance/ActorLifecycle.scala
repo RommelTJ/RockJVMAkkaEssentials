@@ -16,9 +16,9 @@ object ActorLifecycle extends App {
   }
 
   val system = ActorSystem("LifecycleDemo")
-  val parent = system.actorOf(Props[LifecycleActor], "parent")
-  parent ! StartChild
-  parent ! PoisonPill
+//  val parent = system.actorOf(Props[LifecycleActor], "parent")
+//  parent ! StartChild
+//  parent ! PoisonPill
 
   /**
    * Restart
@@ -53,5 +53,8 @@ object ActorLifecycle extends App {
         throw new RuntimeException("I failed...")
     }
   }
+
+  val supervisor = system.actorOf(Props[Parent], "supervisor")
+  supervisor ! FailChild
 
 }
