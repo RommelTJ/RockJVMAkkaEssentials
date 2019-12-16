@@ -63,4 +63,7 @@ object ActorLifecycle extends App {
   supervisor ! FailChild
   supervisor ! CheckChild
 
+  // Supervision Strategy:
+  // If Child throws Exception, message gets removed and actor gets restarted.
+
 }
