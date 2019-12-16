@@ -24,6 +24,15 @@ object ActorLifecycle extends App {
    * Restart
    */
   object Fail
+  object FailChild
+
+  class Parent extends Actor {
+    private val child = context.actorOf(Props[Child], "supervisedChild")
+    override def receive: Receive = {
+      case FailChild => child ! Fail
+    }
+  }
+
   class Child extends Actor with ActorLogging {
     override def receive: Receive = {
       case Fail =>
