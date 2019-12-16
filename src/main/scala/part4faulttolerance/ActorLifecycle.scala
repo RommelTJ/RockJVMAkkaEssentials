@@ -25,11 +25,14 @@ object ActorLifecycle extends App {
    */
   object Fail
   object FailChild
+  object Check
+  object CheckChild
 
   class Parent extends Actor {
     private val child = context.actorOf(Props[Child], "supervisedChild")
     override def receive: Receive = {
       case FailChild => child ! Fail
+      case CheckChild => child ! Check
     }
   }
 
@@ -51,6 +54,8 @@ object ActorLifecycle extends App {
       case Fail =>
         log.info(s"child will fail now...")
         throw new RuntimeException("I failed...")
+      case Check =>
+        log.info(s"Alive and kicking")
     }
   }
 
