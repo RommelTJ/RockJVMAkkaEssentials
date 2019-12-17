@@ -1,7 +1,7 @@
 package part4faulttolerance
 
 import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
-import akka.actor.{Actor, ActorSystem, OneForOneStrategy, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, OneForOneStrategy, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -16,6 +16,22 @@ class SupervisionSpec extends TestKit(ActorSystem("SupervisionSpec"))
   }
 
   import SupervisionSpec._
+
+  "A supervisor" should {
+    "resume its child in case of a minor fault" in {
+      val supervisor = system.actorOf(Props[Supervisor])
+      supervisor ! Props[FussyWordCounter]
+      val child = expectMsgType[ActorRef]
+
+      child ! "I love Akka"
+      child ! Report
+      expectMsg(3)
+
+      child ! "A long sentence greater than 20 characters in this Akka Test"
+      child ! Report
+      expectMsg(3) // State of child was resumed, thus not changed
+    }
+  }
 
 }
 
