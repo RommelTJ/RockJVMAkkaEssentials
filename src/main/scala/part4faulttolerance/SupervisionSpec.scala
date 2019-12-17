@@ -1,6 +1,7 @@
 package part4faulttolerance
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
+import akka.actor.{Actor, ActorSystem, OneForOneStrategy, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -23,6 +24,14 @@ object SupervisionSpec {
   case object Report
 
   class Supervisor extends Actor {
+
+    override val supervisorStrategy = OneForOneStrategy() {
+      case _: NullPointerException => Restart
+      case _: IllegalArgumentException => Stop
+      case _: RuntimeException => Resume
+      case _: Exception => Escalate
+    }
+
     override def receive: Receive = {
       case props: Props =>
         val childRef = context.actorOf(props)
