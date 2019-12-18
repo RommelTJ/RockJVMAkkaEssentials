@@ -31,6 +31,20 @@ class SupervisionSpec extends TestKit(ActorSystem("SupervisionSpec"))
       child ! Report
       expectMsg(3) // State of child was resumed, thus not changed
     }
+
+    "restart its child in case of an empty sentence" in {
+      val supervisor = system.actorOf(Props[Supervisor])
+      supervisor ! Props[FussyWordCounter]
+      val child = expectMsgType[ActorRef]
+
+      child ! "I love Akka"
+      child ! Report
+      expectMsg(3)
+      
+      child ! ""
+      child ! Report
+      expectMsg(0) // Because it was restarted, the internal state is 0.
+    }
   }
 
 }
