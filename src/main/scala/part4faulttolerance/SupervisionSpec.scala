@@ -91,6 +91,12 @@ object SupervisionSpec {
     }
   }
 
+  class NoDeathOnRestartSupervisor extends Supervisor {
+    override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
+      // empty on purpose
+    }
+  }
+
   class FussyWordCounter extends Actor {
     var words = 0
 
