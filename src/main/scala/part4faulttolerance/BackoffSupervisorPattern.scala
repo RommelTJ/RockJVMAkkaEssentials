@@ -16,6 +16,10 @@ object BackoffSupervisorPattern extends App {
       log.info(s"Persistent Actor Starting.")
     }
 
+    override def postStop(): Unit = {
+      log.warning(s"Persistent Actor has stopped.")
+    }
+
     override def receive: Receive = {
       case ReadFile =>
         if (dataSource == null)
