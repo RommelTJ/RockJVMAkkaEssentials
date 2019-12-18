@@ -56,6 +56,17 @@ class SupervisionSpec extends TestKit(ActorSystem("SupervisionSpec"))
       val terminatedMessage = expectMsgType[Terminated]
       assert(terminatedMessage.actor == child)
     }
+
+    "escalate an error when it doesn't know what to do" in {
+      val supervisor = system.actorOf(Props[Supervisor], "supervisor")
+      supervisor ! Props[FussyWordCounter]
+      val child = expectMsgType[ActorRef]
+
+      watch(child)
+      child ! 43 // throws Exception -> Escalate
+      val terminatedMessage = expectMsgType[Terminated]
+      assert(terminatedMessage.actor == child)
+    }
   }
 
 }
