@@ -2,7 +2,7 @@ package part4faulttolerance
 
 import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
 import akka.actor.{Actor, ActorRef, ActorSystem, AllForOneStrategy, OneForOneStrategy, Props, SupervisorStrategy, Terminated}
-import akka.testkit.{ImplicitSender, TestKit}
+import akka.testkit.{EventFilter, ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -82,6 +82,29 @@ class SupervisionSpec extends TestKit(ActorSystem("SupervisionSpec"))
       child ! 45 // throws Exception which Escalates but our restart doesn't kill the child
       child ! Report
       expectMsg(0)
+    }
+  }
+
+  "An all-for-one supervisor" should {
+    "apply the all-for-one strategy" in {
+      val supervisor = system.actorOf(Props[AllForOneSupervisor], "allForOneSupervisor")
+      supervisor ! Props[FussyWordCounter]
+      val child = expectMsgType[ActorRef]
+
+      supervisor ! Props[FussyWordCounter]
+      val secondChild = expectMsgType[ActorRef]
+
+      secondChild ! "Testing supervision"
+      secondChild ! Report
+      expectMsg(2)
+
+      EventFilter[NullPointerException]() intercept {
+        child ! "" // child causes Restart to happen for both children because of all-for-one strategy
+      }
+
+      Thread.sleep(500)
+      secondChild ! Report
+      expectMsg(0) // secondChild was restarted
     }
   }
 
