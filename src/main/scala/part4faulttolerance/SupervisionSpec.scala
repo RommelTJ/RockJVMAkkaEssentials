@@ -1,7 +1,7 @@
 package part4faulttolerance
 
 import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
-import akka.actor.{Actor, ActorRef, ActorSystem, OneForOneStrategy, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -40,10 +40,21 @@ class SupervisionSpec extends TestKit(ActorSystem("SupervisionSpec"))
       child ! "I love Akka"
       child ! Report
       expectMsg(3)
-      
+
       child ! ""
       child ! Report
       expectMsg(0) // Because it was restarted, the internal state is 0.
+    }
+
+    "terminate its child in case of a major error" in {
+      val supervisor = system.actorOf(Props[Supervisor])
+      supervisor ! Props[FussyWordCounter]
+      val child = expectMsgType[ActorRef]
+
+      watch(child)
+      child ! "akka is nice" // Not upper-case, child will be stopped
+      val terminatedMessage = expectMsgType[Terminated]
+      assert(terminatedMessage.actor == child)
     }
   }
 
