@@ -69,6 +69,22 @@ class SupervisionSpec extends TestKit(ActorSystem("SupervisionSpec"))
     }
   }
 
+  "A kinder supervisor" should {
+    "not kill children in case it's restarted or escalates failures" in {
+      val supervisor = system.actorOf(Props[NoDeathOnRestartSupervisor], "kindSupervisor")
+      supervisor ! Props[FussyWordCounter]
+      val child = expectMsgType[ActorRef]
+
+      child ! "Akka is cool"
+      child ! Report
+      expectMsg(3)
+
+      child ! 45 // throws Exception which Escalates but our restart doesn't kill the child
+      child ! Report
+      expectMsg(0)
+    }
+  }
+
 }
 
 object SupervisionSpec {
