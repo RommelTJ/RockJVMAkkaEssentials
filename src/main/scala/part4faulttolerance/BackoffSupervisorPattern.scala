@@ -20,6 +20,10 @@ object BackoffSupervisorPattern extends App {
       log.warning(s"Persistent Actor has stopped.")
     }
 
+    override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
+      log.warning(s"Persistent Actor restarting.")
+    }
+
     override def receive: Receive = {
       case ReadFile =>
         if (dataSource == null)
