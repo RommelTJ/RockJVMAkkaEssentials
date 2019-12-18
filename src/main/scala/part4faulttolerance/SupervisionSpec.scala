@@ -1,7 +1,7 @@
 package part4faulttolerance
 
 import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
-import akka.actor.{Actor, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated}
+import akka.actor.{Actor, ActorRef, ActorSystem, AllForOneStrategy, OneForOneStrategy, Props, SupervisorStrategy, Terminated}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -93,7 +93,7 @@ object SupervisionSpec {
 
   class Supervisor extends Actor {
 
-    override val supervisorStrategy = OneForOneStrategy() {
+    override val supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {
       case _: NullPointerException => Restart
       case _: IllegalArgumentException => Stop
       case _: RuntimeException => Resume
@@ -110,6 +110,15 @@ object SupervisionSpec {
   class NoDeathOnRestartSupervisor extends Supervisor {
     override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
       // empty on purpose
+    }
+  }
+
+  class AllForOneSupervisor extends Supervisor {
+    override val supervisorStrategy = AllForOneStrategy() {
+      case _: NullPointerException => Restart
+      case _: IllegalArgumentException => Stop
+      case _: RuntimeException => Resume
+      case _: Exception => Escalate
     }
   }
 
