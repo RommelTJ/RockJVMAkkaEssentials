@@ -35,8 +35,8 @@ object BackoffSupervisorPattern extends App {
   }
 
   val system = ActorSystem("BackoffSupervisorDemo")
-  val simpleActor = system.actorOf(Props[FileBasedPersistentActor], "simpleActor")
-  simpleActor ! ReadFile
+  // val simpleActor = system.actorOf(Props[FileBasedPersistentActor], "simpleActor")
+  // simpleActor ! ReadFile
 
   val simpleSupervisorProps = BackoffSupervisor.props(
     Backoff.onFailure(
@@ -49,6 +49,7 @@ object BackoffSupervisorPattern extends App {
   )
 
   val simpleBackoffSupervisor = system.actorOf(simpleSupervisorProps, "simpleSupervisor")
+  simpleBackoffSupervisor ! ReadFile
 
   /*
   simpleSupervisor
