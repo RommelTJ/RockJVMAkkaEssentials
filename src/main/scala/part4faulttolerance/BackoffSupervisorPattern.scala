@@ -27,7 +27,7 @@ object BackoffSupervisorPattern extends App {
     override def receive: Receive = {
       case ReadFile =>
         if (dataSource == null)
-          dataSource = Source.fromFile(new File("src/main/resources/testfiles/important.txt"))
+          dataSource = Source.fromFile(new File("src/main/resources/testfiles/important_data.txt"))
         log.info(s"I've just read some important data: ${dataSource.getLines().toList}")
     }
   }
