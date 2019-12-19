@@ -5,7 +5,7 @@ import java.io.File
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.pattern.{Backoff, BackoffSupervisor}
 import scala.concurrent.duration._
-
+import scala.language.postfixOps
 import scala.io.Source
 
 object BackoffSupervisorPattern extends App {
