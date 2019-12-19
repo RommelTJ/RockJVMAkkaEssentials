@@ -50,4 +50,12 @@ object BackoffSupervisorPattern extends App {
 
   val simpleBackoffSupervisor = system.actorOf(simpleSupervisorProps, "simpleSupervisor")
 
+  /*
+  simpleSupervisor
+  - child called simpleBackoffActor (props of type FileBasedPersistentActor)
+  - supervision strategy is the default one (restarting on everything)
+    - first attempt after 3 seconds
+    - next attempt is 2x the previous attempt
+   */
+
 }
