@@ -40,11 +40,11 @@ object BackoffSupervisorPattern extends App {
 
   val simpleSupervisorProps = BackoffSupervisor.props(
     Backoff.onFailure(
-      Props[FileBasedPersistentActor],
-      "simpleBackoffActor",
-      3 seconds,
-      30 seconds,
-      0.2
+      childProps = Props[FileBasedPersistentActor],
+      childName = "simpleBackoffActor",
+      minBackoff = 3 seconds,
+      maxBackoff = 30 seconds,
+      randomFactor = 0.2
     )
   )
 
