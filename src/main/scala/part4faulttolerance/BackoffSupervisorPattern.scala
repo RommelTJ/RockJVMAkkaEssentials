@@ -85,7 +85,17 @@ object BackoffSupervisorPattern extends App {
     }
   }
 
-  val eagerActor = system.actorOf(Props[EagerFileBasedPersistentActor], "eagerActor")
+  // val eagerActor = system.actorOf(Props[EagerFileBasedPersistentActor], "eagerActor")
   // Default ActorInitializationException strategy => STOP
+
+  val repeatedSupervisorProps = BackoffSupervisor.props(
+    Backoff.onStop(
+      childProps = Props[EagerFileBasedPersistentActor],
+      childName = "eagerActor",
+      minBackoff = 1 second,
+      maxBackoff = 30 seconds,
+      randomFactor = 0.1
+    )
+  )
 
 }
