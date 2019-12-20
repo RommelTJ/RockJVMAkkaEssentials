@@ -82,6 +82,7 @@ object BackoffSupervisorPattern extends App {
     override def preStart(): Unit = {
       log.info(s"Eager actor starting")
       dataSource = Source.fromFile(new File("src/main/resources/testfiles/important_data.txt"))
+      log.info(s"I've just read some important data: ${dataSource.getLines().toList}")
     }
   }
 
