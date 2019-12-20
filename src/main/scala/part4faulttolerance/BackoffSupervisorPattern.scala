@@ -97,5 +97,13 @@ object BackoffSupervisorPattern extends App {
       randomFactor = 0.1
     )
   )
+  val repeatedSupervisor = system.actorOf(repeatedSupervisorProps, "eagerSupervisor")
+  /*
+  eagerSupervisor
+  - child eagerActor
+   - will die on start with ActorInitializationException
+   - trigger the supervision strategy in eagerSupervisor => STOP eagerActor
+  - backoff will kick in after 1 second, 2s, 4,s, 8s, 16s.
+   */
 
 }
