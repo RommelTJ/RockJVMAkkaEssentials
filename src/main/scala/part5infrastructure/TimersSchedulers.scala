@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 
 object TimersSchedulers extends App {
 
@@ -11,5 +11,7 @@ object TimersSchedulers extends App {
   }
 
   val system = ActorSystem("SchedulersTimersDemo")
+  val simpleActor = system.actorOf(Props[SimpleActor])
+  system.log.info(s"Scheduling reminder for simpleActor")
 
 }
