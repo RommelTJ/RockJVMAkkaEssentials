@@ -57,7 +57,7 @@ object TimersSchedulers extends App {
     }
   }
 
-  val selfClosingActor = system.actorOf(Props[SelfClosingActor], "selfClosingActor")
+//  val selfClosingActor = system.actorOf(Props[SelfClosingActor], "selfClosingActor")
 //  system.scheduler.scheduleOnce(250 millis) {
 //    selfClosingActor ! "ping"
 //  }
@@ -87,6 +87,11 @@ object TimersSchedulers extends App {
         timers.cancel(TimerKey)
         context.stop(self)
     }
+  }
+
+  val timerBasedScheduleActor = system.actorOf(Props[TimerBasedScheduleActor], "timerActor")
+  system.scheduler.scheduleOnce(5 seconds) {
+    timerBasedScheduleActor ! Stop
   }
 
 }
