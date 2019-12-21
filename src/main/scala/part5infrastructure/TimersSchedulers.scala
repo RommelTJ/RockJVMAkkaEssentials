@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging, ActorSystem, Cancellable, Props}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Cancellable, Props, Timers}
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -58,12 +58,35 @@ object TimersSchedulers extends App {
   }
 
   val selfClosingActor = system.actorOf(Props[SelfClosingActor], "selfClosingActor")
-  system.scheduler.scheduleOnce(250 millis) {
-    selfClosingActor ! "ping"
-  }
-  system.scheduler.scheduleOnce(2 seconds) {
-    system.log.info(s"Sending pong to the self-closing actor")
-    selfClosingActor ! "pong"
+//  system.scheduler.scheduleOnce(250 millis) {
+//    selfClosingActor ! "ping"
+//  }
+//  system.scheduler.scheduleOnce(2 seconds) {
+//    system.log.info(s"Sending pong to the self-closing actor")
+//    selfClosingActor ! "pong"
+//  }
+
+  /**
+   * Timer: Used to send messages to yourself.
+   */
+  case object TimerKey
+  case object Start
+  case object Reminder
+  case object Stop
+  class TimerBasedScheduleActor extends Actor with ActorLogging with Timers {
+    timers.startSingleTimer(key = TimerKey, msg = Start, timeout = 500 millis)
+
+    override def receive: Receive = {
+      case Start =>
+        log.info(s"Bootstrapping")
+        timers.startPeriodicTimer(TimerKey, Reminder, 1 second)
+      case Reminder =>
+        log.info(s"I am alive.")
+      case Stop =>
+        log.warning("Stopping!")
+        timers.cancel(TimerKey)
+        context.stop(self)
+    }
   }
 
 }
