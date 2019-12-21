@@ -16,8 +16,9 @@ object TimersSchedulers extends App {
   val simpleActor = system.actorOf(Props[SimpleActor])
   system.log.info(s"Scheduling reminder for simpleActor")
 
+  implicit val executionContext = system.dispatcher
   system.scheduler.scheduleOnce(delay = 1 second) {
     simpleActor ! "reminder"
-  }(system.dispatcher)
+  }
 
 }
