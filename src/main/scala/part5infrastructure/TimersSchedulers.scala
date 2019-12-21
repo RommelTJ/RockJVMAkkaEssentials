@@ -37,4 +37,24 @@ object TimersSchedulers extends App {
    * - If you send another message, the time window is reset.
    */
 
+  class SelfClosingActor extends Actor with ActorLogging {
+    var schedule = createTimeoutWindow()
+
+    override def receive: Receive = {
+      case "timeout" =>
+        log.info(s"Stopping myself")
+        context.stop(self)
+      case message =>
+        log.info(s"Received message: $message... staying alive.")
+        schedule.cancel()
+        schedule = createTimeoutWindow()
+    }
+
+    def createTimeoutWindow(): Cancellable = {
+      context.system.scheduler.scheduleOnce(1 second) {
+        self ! "timeout"
+      }
+    }
+  }
+
 }
