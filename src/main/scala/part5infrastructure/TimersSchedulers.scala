@@ -1,6 +1,8 @@
 package part5infrastructure
 
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 object TimersSchedulers extends App {
 
@@ -13,5 +15,9 @@ object TimersSchedulers extends App {
   val system = ActorSystem("SchedulersTimersDemo")
   val simpleActor = system.actorOf(Props[SimpleActor])
   system.log.info(s"Scheduling reminder for simpleActor")
+
+  system.scheduler.scheduleOnce(delay = 1 second) {
+    simpleActor ! "reminder"
+  }(system.dispatcher)
 
 }
