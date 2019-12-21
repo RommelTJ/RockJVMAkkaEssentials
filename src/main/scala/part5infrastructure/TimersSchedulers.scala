@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorSystem}
 
 object TimersSchedulers extends App {
 
@@ -9,5 +9,7 @@ object TimersSchedulers extends App {
       case message => log.info(message.toString)
     }
   }
+
+  val system = ActorSystem("SchedulersTimersDemo")
 
 }
