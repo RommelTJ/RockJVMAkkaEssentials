@@ -15,20 +15,20 @@ object TimersSchedulers extends App {
 
   val system = ActorSystem("SchedulersTimersDemo")
   val simpleActor = system.actorOf(Props[SimpleActor])
-  system.log.info(s"Scheduling reminder for simpleActor")
+//  system.log.info(s"Scheduling reminder for simpleActor")
 
   import system.dispatcher
-  system.scheduler.scheduleOnce(delay = 1 second) {
-    simpleActor ! "reminder"
-  }
-
-  val routine: Cancellable = system.scheduler.schedule(initialDelay = 1 second, interval = 2 seconds) {
-    simpleActor ! "heartbeat"
-  }
-
-  system.scheduler.scheduleOnce(5 seconds) {
-    routine.cancel()
-  }
+//  system.scheduler.scheduleOnce(delay = 1 second) {
+//    simpleActor ! "reminder"
+//  }
+//
+//  val routine: Cancellable = system.scheduler.schedule(initialDelay = 1 second, interval = 2 seconds) {
+//    simpleActor ! "heartbeat"
+//  }
+//
+//  system.scheduler.scheduleOnce(5 seconds) {
+//    routine.cancel()
+//  }
 
   /**
    * Exercise: Implement a self-closing actor.
@@ -55,6 +55,15 @@ object TimersSchedulers extends App {
         self ! "timeout"
       }
     }
+  }
+
+  val selfClosingActor = system.actorOf(Props[SelfClosingActor], "selfClosingActor")
+  system.scheduler.scheduleOnce(250 millis) {
+    selfClosingActor ! "ping"
+  }
+  system.scheduler.scheduleOnce(2 seconds) {
+    system.log.info(s"Sending pong to the self-closing actor")
+    selfClosingActor ! "pong"
   }
 
 }
