@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{Actor, ActorLogging, Props, Terminated}
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 
 object Routers extends App {
@@ -18,10 +18,16 @@ object Routers extends App {
     }
 
     // Step 2 - Define Router
-    private val router = Router(RoundRobinRoutingLogic(), slaves)
+    private var router = Router(RoundRobinRoutingLogic(), slaves)
 
-    // Step 3 - Route the messages
     override def receive: Receive = {
+      // Step 4 - handle the termination/lifecycle of the routees
+      case Terminated(ref) =>
+        router = router.removeRoutee(ref)
+        val newSlave = context.actorOf(Props[Slave])
+        context.watch(newSlave)
+        router.addRoutee(newSlave)
+      // Step 3 - Route the messages
       case message =>
         router.route(message, sender())
     }
