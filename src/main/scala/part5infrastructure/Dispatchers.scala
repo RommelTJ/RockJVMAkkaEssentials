@@ -39,7 +39,7 @@ object Dispatchers extends App {
    */
   class DBActor extends Actor with ActorLogging {
     implicit val executionContext: ExecutionContext = context.dispatcher
-    
+
     override def receive: Receive = {
       case message =>
         Future {
@@ -49,5 +49,8 @@ object Dispatchers extends App {
         }
     }
   }
+
+  val dbActor = system.actorOf(Props[DBActor])
+  dbActor ! "The meaning of life is 42"
 
 }
