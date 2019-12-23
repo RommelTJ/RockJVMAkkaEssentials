@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorSystem}
 
 object Dispatchers extends App {
 
@@ -13,5 +13,7 @@ object Dispatchers extends App {
         log.info(s"[$count] ${message.toString}")
     }
   }
+
+  val system = ActorSystem("DispatchersDemo")
 
 }
