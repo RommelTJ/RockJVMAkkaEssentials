@@ -40,7 +40,8 @@ object Dispatchers extends App {
   class DBActor extends Actor with ActorLogging {
     // Solution #1 to blocking future is to use a different execution context.
     implicit val executionContext: ExecutionContext = context.system.dispatchers.lookup("my-dispatcher") // context.dispatcher
-    
+    // Solution #2 - Use Router
+
     override def receive: Receive = {
       case message =>
         Future {
