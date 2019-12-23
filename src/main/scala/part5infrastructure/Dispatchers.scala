@@ -19,6 +19,7 @@ object Dispatchers extends App {
 
   val system = ActorSystem("DispatchersDemo") // , ConfigFactory.load().getConfig("dispatchersDemo")
 
+  // Method #1 - Programmatic.
   val actors = for (i <- 1 to 10) yield system.actorOf(Props[Counter].withDispatcher("my-dispatcher"), s"counter_$i")
   val r = new Random()
   for (i <- 1 to 1000) {
