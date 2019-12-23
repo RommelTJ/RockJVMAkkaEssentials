@@ -1,6 +1,7 @@
 package part5infrastructure
 
 import akka.actor.{Actor, ActorLogging, ActorSystem}
+import com.typesafe.config.ConfigFactory
 
 object Dispatchers extends App {
 
@@ -14,6 +15,6 @@ object Dispatchers extends App {
     }
   }
 
-  val system = ActorSystem("DispatchersDemo")
+  val system = ActorSystem("DispatchersDemo", ConfigFactory.load().getConfig("dispatchersDemo"))
 
 }
