@@ -1,7 +1,7 @@
 package part5infrastructure
 
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props, Terminated}
-import akka.routing.{ActorRefRoutee, FromConfig, RoundRobinPool, RoundRobinRoutingLogic, Router}
+import akka.routing.{ActorRefRoutee, FromConfig, RoundRobinGroup, RoundRobinPool, RoundRobinRoutingLogic, Router}
 import com.typesafe.config.ConfigFactory
 
 object Routers extends App {
@@ -59,8 +59,24 @@ object Routers extends App {
 
   // 2.2 from configuration
   val poolMaster2 = system.actorOf(FromConfig.props(Props[Slave]), "poolMaster2")
+//  for (i <- 1 to 10) {
+//    poolMaster2 ! s"[$i] Hello from the world"
+//  }
+
+  /*
+  Method #3 - Router with Actors created elsewhere
+  GROUP router
+   */
+  // ... in another part of my application
+  val slaveList = (1 to 5).map(i => system.actorOf(Props[Slave], s"slave_$i")).toList
+
+  // need their paths
+  val slavePaths = slaveList.map(slaveRef => slaveRef.path.toString)
+
+  // 3.1 in the code
+  val groupMaster = system.actorOf(RoundRobinGroup(slavePaths).props())
   for (i <- 1 to 10) {
-    poolMaster2 ! s"[$i] Hello from the world"
+    groupMaster ! s"[$i] Hello from the world"
   }
 
 }
