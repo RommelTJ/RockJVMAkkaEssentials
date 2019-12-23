@@ -17,6 +17,6 @@ object Dispatchers extends App {
 
   val system = ActorSystem("DispatchersDemo", ConfigFactory.load().getConfig("dispatchersDemo"))
 
-  val simpleCounterActor = system.actorOf(Props[Counter].withDispatcher("my-dispatcher"))
+  val actors = for (i <- 1 to 10) yield system.actorOf(Props[Counter].withDispatcher("my-dispatcher"), s"counter_$i")
 
 }
