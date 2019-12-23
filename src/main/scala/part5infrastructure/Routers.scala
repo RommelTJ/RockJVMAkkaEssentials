@@ -1,7 +1,7 @@
 package part5infrastructure
 
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props, Terminated}
-import akka.routing.{ActorRefRoutee, FromConfig, RoundRobinGroup, RoundRobinPool, RoundRobinRoutingLogic, Router}
+import akka.routing.{ActorRefRoutee, Broadcast, FromConfig, RoundRobinGroup, RoundRobinPool, RoundRobinRoutingLogic, Router}
 import com.typesafe.config.ConfigFactory
 
 object Routers extends App {
@@ -84,5 +84,10 @@ object Routers extends App {
   for (i <- 1 to 10) {
     groupMaster2 ! s"[$i] Hello from the world"
   }
+
+  /**
+   * Special messages
+   */
+  groupMaster2 ! Broadcast("Hello, everyone") // sent to every single slave
 
 }
