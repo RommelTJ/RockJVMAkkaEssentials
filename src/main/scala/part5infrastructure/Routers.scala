@@ -11,8 +11,8 @@ object Routers extends App {
   class Master extends Actor {
     // Step 1 - Create Routees.
     // 5 actor routees based off Slave Actors
-    private val slaves = for (_ <- 1 to 5) yield {
-      val slave = context.actorOf(Props[Slave])
+    private val slaves = for (i <- 1 to 5) yield {
+      val slave = context.actorOf(Props[Slave], s"slave_$i")
       context.watch(slave)
       ActorRefRoutee(slave)
     }
@@ -42,8 +42,8 @@ object Routers extends App {
   val system = ActorSystem("RoutersDemo" /* TODO: Config */)
   val master = system.actorOf(Props[Master], "master")
 
-  for (_ <- 1 to 10) {
-    master ! "Hello from the world"
+  for (i <- 1 to 10) {
+    master ! s"[$i] Hello from the world"
   }
 
 }
