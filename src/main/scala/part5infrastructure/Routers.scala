@@ -75,8 +75,14 @@ object Routers extends App {
 
   // 3.1 in the code
   val groupMaster = system.actorOf(RoundRobinGroup(slavePaths).props())
+//  for (i <- 1 to 10) {
+//    groupMaster ! s"[$i] Hello from the world"
+//  }
+
+  // 3.2 from configuration
+  val groupMaster2 = system.actorOf(FromConfig.props(), "groupMaster2")
   for (i <- 1 to 10) {
-    groupMaster ! s"[$i] Hello from the world"
+    groupMaster2 ! s"[$i] Hello from the world"
   }
 
 }
