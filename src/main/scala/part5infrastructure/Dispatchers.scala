@@ -51,6 +51,13 @@ object Dispatchers extends App {
   }
 
   val dbActor = system.actorOf(Props[DBActor])
-  dbActor ! "The meaning of life is 42"
+//  dbActor ! "The meaning of life is 42"
+
+  val nonBlockingActor = system.actorOf(Props[Counter])
+  for (i <- 1 to 1000) {
+    val message = s"Important message $i"
+    dbActor ! message
+    nonBlockingActor ! message
+  }
 
 }
