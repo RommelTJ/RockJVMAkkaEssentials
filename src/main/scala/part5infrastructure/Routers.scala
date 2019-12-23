@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging, Props, Terminated}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props, Terminated}
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 
 object Routers extends App {
@@ -37,6 +37,13 @@ object Routers extends App {
     override def receive: Receive = {
       case message => log.info(message.toString)
     }
+  }
+
+  val system = ActorSystem("RoutersDemo" /* TODO: Config */)
+  val master = system.actorOf(Props[Master], "master")
+
+  for (_ <- 1 to 10) {
+    master ! "Hello from the world"
   }
 
 }
