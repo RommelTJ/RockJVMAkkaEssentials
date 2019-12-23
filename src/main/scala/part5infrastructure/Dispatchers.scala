@@ -38,8 +38,9 @@ object Dispatchers extends App {
    * Dispatchers implement the ExecutionContext trait
    */
   class DBActor extends Actor with ActorLogging {
-    implicit val executionContext: ExecutionContext = context.dispatcher
-
+    // Solution #1 to blocking future is to use a different execution context.
+    implicit val executionContext: ExecutionContext = context.system.dispatchers.lookup("my-dispatcher") // context.dispatcher
+    
     override def receive: Receive = {
       case message =>
         Future {
