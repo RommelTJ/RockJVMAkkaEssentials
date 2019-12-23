@@ -1,7 +1,8 @@
 package part5infrastructure
 
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props, Terminated}
-import akka.routing.{ActorRefRoutee, RoundRobinPool, RoundRobinRoutingLogic, Router}
+import akka.routing.{ActorRefRoutee, FromConfig, RoundRobinPool, RoundRobinRoutingLogic, Router}
+import com.typesafe.config.ConfigFactory
 
 object Routers extends App {
 
@@ -39,7 +40,7 @@ object Routers extends App {
     }
   }
 
-  val system = ActorSystem("RoutersDemo" /* TODO: Config */)
+  val system = ActorSystem("RoutersDemo", ConfigFactory.load().getConfig("routersDemo"))
   val master = system.actorOf(Props[Master], "master")
 
 //  for (i <- 1 to 10) {
@@ -50,9 +51,16 @@ object Routers extends App {
   Method #2 - Router Actor with its own Children
   POOL router
    */
+  // 2.1 programmatically (in code)
   val poolMaster = system.actorOf(RoundRobinPool(5).props(Props[Slave]), "simplePoolMaster")
+//  for (i <- 1 to 10) {
+//    poolMaster ! s"[$i] Hello from the world"
+//  }
+
+  // 2.2 from configuration
+  val poolMaster2 = system.actorOf(FromConfig.props(Props[Slave]), "poolMaster2")
   for (i <- 1 to 10) {
-    poolMaster ! s"[$i] Hello from the world"
+    poolMaster2 ! s"[$i] Hello from the world"
   }
 
 }
