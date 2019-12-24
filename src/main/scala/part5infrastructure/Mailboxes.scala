@@ -38,6 +38,9 @@ object Mailboxes extends App {
   // Step 3 - Attach the dispatcher to an actor
   val supportTicketLogger = system.actorOf(Props[SimpleActor].withDispatcher("support-ticket-dispatcher"))
   supportTicketLogger ! PoisonPill
+  Thread.sleep(1000) // If you do this, the messages will be sent to dead letters.
+  // This happens because after which time can I send another message and be prioritized accordingly? You cannot know
+  // or configure the wait. Whatever is put on the queue will get handled.
   supportTicketLogger ! "[P3] this thing would be nice to have"
   supportTicketLogger ! "[P0] this needs to be solved now"
   supportTicketLogger ! "[P1] do this when you have the time"
