@@ -21,6 +21,7 @@ object Mailboxes extends App {
    * P2
    * P3 -> least important
    */
+  // Step 1 - Mailbox definition
   class SupportTicketPriorityMailbox(settings: ActorSystem.Settings, config: Config)
     extends UnboundedPriorityMailbox(
       PriorityGenerator {
@@ -31,5 +32,7 @@ object Mailboxes extends App {
         case _ => 4
       }
     )
+
+  // Step 2 - Make it known in the configuration
 
 }
