@@ -41,9 +41,9 @@ object Mailboxes extends App {
   // Thread.sleep(1000) // If you do this, the messages will be sent to dead letters.
   // This happens because after which time can I send another message and be prioritized accordingly? You cannot know
   // or configure the wait. Whatever is put on the queue will get handled.
-  supportTicketLogger ! "[P3] this thing would be nice to have"
-  supportTicketLogger ! "[P0] this needs to be solved now"
-  supportTicketLogger ! "[P1] do this when you have the time"
+//  supportTicketLogger ! "[P3] this thing would be nice to have"
+//  supportTicketLogger ! "[P0] this needs to be solved now"
+//  supportTicketLogger ! "[P1] do this when you have the time"
 
   /**
    * Interesting case #2 - Control-aware mailbox
@@ -56,11 +56,14 @@ object Mailboxes extends App {
   // - make the actor attach to the mailbox
   // Method #1
   val controlAwareActor = system.actorOf(Props[SimpleActor].withMailbox("control-mailbox"))
-  controlAwareActor ! "[P0] this needs to be solved now"
-  controlAwareActor ! "[P1] do this when you have the time"
-  controlAwareActor ! ManagementTicket
+//  controlAwareActor ! "[P0] this needs to be solved now"
+//  controlAwareActor ! "[P1] do this when you have the time"
+//  controlAwareActor ! ManagementTicket
 
   // Method #2 - Using the deployment configuration
   val alternativeControlAwareActor = system.actorOf(Props[SimpleActor], "alternativeControlAwareActor")
+  alternativeControlAwareActor ! "[P0] this needs to be solved now"
+  alternativeControlAwareActor ! "[P1] do this when you have the time"
+  alternativeControlAwareActor ! ManagementTicket
 
 }
