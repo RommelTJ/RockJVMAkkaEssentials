@@ -37,5 +37,8 @@ object Mailboxes extends App {
 
   // Step 3 - Attach the dispatcher to an actor
   val supportTicketLogger = system.actorOf(Props[SimpleActor].withDispatcher("support-ticket-dispatcher"))
+  supportTicketLogger ! "[P3] this thing would be nice to have"
+  supportTicketLogger ! "[P0] this needs to be solved now"
+  supportTicketLogger ! "[P1] do this when you have the time"
 
 }
