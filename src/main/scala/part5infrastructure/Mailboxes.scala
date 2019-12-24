@@ -1,6 +1,6 @@
 package part5infrastructure
 
-import akka.actor.{Actor, ActorLogging, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.dispatch.{PriorityGenerator, UnboundedPriorityMailbox}
 import com.typesafe.config.Config
 
@@ -34,5 +34,8 @@ object Mailboxes extends App {
     )
 
   // Step 2 - Make it known in the configuration
+
+  // Step 3 - Attach the dispatcher to an actor
+  val supportTicketLogger = system.actorOf(Props[SimpleActor].withDispatcher("support-ticket-dispatcher"))
 
 }
