@@ -1,6 +1,6 @@
 package part6patterns
 
-import akka.actor.{Actor, ActorLogging, ActorSystem, Stash}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props, Stash}
 
 object StashDemo extends App {
 
@@ -72,7 +72,12 @@ object StashDemo extends App {
   }
 
   val system = ActorSystem("StashDemo")
-  
-
+  val resourceActor = system.actorOf(Props[ResourceActor], "resourceActor")
+  resourceActor ! Write("I love stash")
+  resourceActor ! Read
+  resourceActor ! Open
+  resourceActor ! Write("Writing something else")
+  resourceActor ! Read
+  resourceActor ! Read
 
 }
