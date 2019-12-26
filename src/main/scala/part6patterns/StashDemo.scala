@@ -41,7 +41,15 @@ object StashDemo extends App {
 
     override def receive: Receive = closed
 
-    def closed: Receive = ???
+    def closed: Receive = {
+      case Open =>
+        log.info(s"Opening resource...")
+        unstashAll()
+        context.become(open)
+      case message =>
+        log.info(s"Stashing $message because I can't handle it in the closed state...")
+        stash()
+    }
 
     def open: Receive = ???
   }
