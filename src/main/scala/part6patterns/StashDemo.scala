@@ -36,6 +36,8 @@ object StashDemo extends App {
   case object Closed
   case object Read
   case class Write(data: String)
+
+  // Step 1 - Mix-in the Stash trait
   class ResourceActor extends Actor with ActorLogging with Stash {
     private var innerData: String = ""
 
@@ -44,14 +46,29 @@ object StashDemo extends App {
     def closed: Receive = {
       case Open =>
         log.info(s"Opening resource...")
+        // Step 3 - Before doing context become, you do unstashAll()
         unstashAll()
         context.become(open)
       case message =>
         log.info(s"Stashing $message because I can't handle it in the closed state...")
+        // Step 2 - Stash away messages that you cannot handle.
         stash()
     }
 
-    def open: Receive = ???
+    def open: Receive = {
+      case Read =>
+        log.info(s"I have read: $innerData")
+      case Write(data) =>
+        log.info(s"I am writing data: $data")
+        innerData = data
+      case Closed =>
+        log.info(s"Closing resource...")
+        unstashAll()
+        context.become(closed)
+      case message =>
+        log.info(s"Stashing $message because I can't handle it in the open state...")
+        stash()
+    }
   }
 
 
