@@ -59,14 +59,15 @@ object AskSpec {
       case RegisterUser(username, password) =>
         authDb ! Write(username, password)
       case Authenticate(username, password) =>
+        val originalSender = sender()
         val future = authDb ? Read(username)
         future.onComplete {
           // NEVER CALL METHODS ON THE ACTOR INSTANCE OR ACCESS MUTABLE STATE IN ONCOMPLETE.
           case Success(None) =>
-            sender() ! AuthFailure("Username not found")
+            originalSender ! AuthFailure("Username not found")
           case Success(Some(dbPassword)) =>
-            if (dbPassword == password) sender() ! AuthSuccess
-            else sender() ! AuthFailure("Password incorrect.")
+            if (dbPassword == password) originalSender ! AuthSuccess
+            else originalSender ! AuthFailure("Password incorrect.")
         }
     }
   }
