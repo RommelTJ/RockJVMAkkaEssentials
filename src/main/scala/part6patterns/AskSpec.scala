@@ -25,46 +25,33 @@ class AskSpec extends TestKit(ActorSystem("AskSpec"))
   }
 
   import AskSpec._
-  import AuthManager._
 
   "An authenticator" should {
-    "fail to authenticate a non-registered user" in {
-      val authManager = system.actorOf(Props[AuthManager])
-      authManager ! Authenticate("rommel", "password")
-      expectMsg(AuthFailure(AUTH_FAILURE_NOT_FOUND))
-    }
-
-    "fail to authenticate if invalid password" in {
-      val authManager = system.actorOf(Props[AuthManager])
-      authManager ! RegisterUser("rommel", "password")
-      authManager ! Authenticate("rommel", "wrong_password")
-      expectMsg(AuthFailure(AUTH_FAILURE_PASSWORD_INVALID))
-    }
-
-    "successfully authenticate a registered user" in {
-      val authManager = system.actorOf(Props[AuthManager])
-      authManager ! RegisterUser("rommel", "password")
-      authManager ! Authenticate("rommel", "password")
-      expectMsg(AuthSuccess)
-    }
+    authenticatorTestSuite(Props[AuthManager])
   }
 
   "A piped authenticator" should {
+    authenticatorTestSuite(Props[PipedAuthManager])
+  }
+
+  def authenticatorTestSuite(props: Props) = {
+    import AuthManager._
+
     "fail to authenticate a non-registered user" in {
-      val authManager = system.actorOf(Props[PipedAuthManager])
+      val authManager = system.actorOf(props)
       authManager ! Authenticate("rommel", "password")
       expectMsg(AuthFailure(AUTH_FAILURE_NOT_FOUND))
     }
 
     "fail to authenticate if invalid password" in {
-      val authManager = system.actorOf(Props[PipedAuthManager])
+      val authManager = system.actorOf(props)
       authManager ! RegisterUser("rommel", "password")
       authManager ! Authenticate("rommel", "wrong_password")
       expectMsg(AuthFailure(AUTH_FAILURE_PASSWORD_INVALID))
     }
 
     "successfully authenticate a registered user" in {
-      val authManager = system.actorOf(Props[PipedAuthManager])
+      val authManager = system.actorOf(props)
       authManager ! RegisterUser("rommel", "password")
       authManager ! Authenticate("rommel", "password")
       expectMsg(AuthSuccess)
