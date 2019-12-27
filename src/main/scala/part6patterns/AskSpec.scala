@@ -63,6 +63,7 @@ object AskSpec {
         val future = authDb ? Read(username)
         future.onComplete {
           // NEVER CALL METHODS ON THE ACTOR INSTANCE OR ACCESS MUTABLE STATE IN ONCOMPLETE.
+          // Avoid closing over the actor instance or mutable state
           case Success(None) =>
             originalSender ! AuthFailure("Username not found")
           case Success(Some(dbPassword)) =>
