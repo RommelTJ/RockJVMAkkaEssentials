@@ -74,22 +74,25 @@ object AskSpec {
     private val authDb = context.actorOf(Props[KVActor])
 
     override def receive: Receive = {
-      case RegisterUser(username, password) =>
-        authDb ! Write(username, password)
-      case Authenticate(username, password) =>
-        val originalSender = sender()
-        val future = authDb ? Read(username)
-        future.onComplete {
-          // NEVER CALL METHODS ON THE ACTOR INSTANCE OR ACCESS MUTABLE STATE IN ONCOMPLETE.
-          // Avoid closing over the actor instance or mutable state
-          case Success(None) =>
-            originalSender ! AuthFailure(AUTH_FAILURE_NOT_FOUND)
-          case Success(Some(dbPassword)) =>
-            if (dbPassword == password) originalSender ! AuthSuccess
-            else originalSender ! AuthFailure(AUTH_FAILURE_PASSWORD_INVALID)
-          case Failure(_) => originalSender ! AuthFailure(AUTH_FAILURE_SYSTEM)
-        }
+      case RegisterUser(username, password) => authDb ! Write(username, password)
+      case Authenticate(username, password) => handleAuthentication(username, password)
     }
+
+    def handleAuthentication(username: String, password: String): Unit = {
+      val originalSender = sender()
+      val future = authDb ? Read(username)
+      future.onComplete {
+        // NEVER CALL METHODS ON THE ACTOR INSTANCE OR ACCESS MUTABLE STATE IN ONCOMPLETE.
+        // Avoid closing over the actor instance or mutable state
+        case Success(None) =>
+          originalSender ! AuthFailure(AUTH_FAILURE_NOT_FOUND)
+        case Success(Some(dbPassword)) =>
+          if (dbPassword == password) originalSender ! AuthSuccess
+          else originalSender ! AuthFailure(AUTH_FAILURE_PASSWORD_INVALID)
+        case Failure(_) => originalSender ! AuthFailure(AUTH_FAILURE_SYSTEM)
+      }
+    }
+
   }
 
   object AuthManager {
