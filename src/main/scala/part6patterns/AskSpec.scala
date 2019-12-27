@@ -22,6 +22,15 @@ class AskSpec extends TestKit(ActorSystem("AskSpec"))
   }
 
   import AskSpec._
+  import AuthManager._
+
+  "An authenticator" should {
+    "fail to authenticate a non-registered user" in {
+      val authManager = system.actorOf(Props[AuthManager])
+      authManager ! Authenticate("rommel", "password")
+      expectMsg(AuthFailure(AUTH_FAILURE_NOT_FOUND))
+    }
+  }
 
 }
 
