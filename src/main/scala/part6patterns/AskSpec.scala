@@ -49,6 +49,28 @@ class AskSpec extends TestKit(ActorSystem("AskSpec"))
     }
   }
 
+  "A piped authenticator" should {
+    "fail to authenticate a non-registered user" in {
+      val authManager = system.actorOf(Props[PipedAuthManager])
+      authManager ! Authenticate("rommel", "password")
+      expectMsg(AuthFailure(AUTH_FAILURE_NOT_FOUND))
+    }
+
+    "fail to authenticate if invalid password" in {
+      val authManager = system.actorOf(Props[PipedAuthManager])
+      authManager ! RegisterUser("rommel", "password")
+      authManager ! Authenticate("rommel", "wrong_password")
+      expectMsg(AuthFailure(AUTH_FAILURE_PASSWORD_INVALID))
+    }
+
+    "successfully authenticate a registered user" in {
+      val authManager = system.actorOf(Props[PipedAuthManager])
+      authManager ! RegisterUser("rommel", "password")
+      authManager ! Authenticate("rommel", "password")
+      expectMsg(AuthSuccess)
+    }
+  }
+
 }
 
 object AskSpec {
