@@ -10,7 +10,7 @@ import akka.util.Timeout
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 class AskSpec extends TestKit(ActorSystem("AskSpec"))
   with ImplicitSender
@@ -50,6 +50,8 @@ object AskSpec {
   case object AuthSuccess
 
   class AuthManager extends Actor with ActorLogging {
+    import AuthManager._
+
     implicit val timeout: Timeout = Timeout(1 second)
     implicit val executionContext: ExecutionContext = context.dispatcher
 
@@ -65,12 +67,19 @@ object AskSpec {
           // NEVER CALL METHODS ON THE ACTOR INSTANCE OR ACCESS MUTABLE STATE IN ONCOMPLETE.
           // Avoid closing over the actor instance or mutable state
           case Success(None) =>
-            originalSender ! AuthFailure("Username not found")
+            originalSender ! AuthFailure(AUTH_FAILURE_NOT_FOUND)
           case Success(Some(dbPassword)) =>
             if (dbPassword == password) originalSender ! AuthSuccess
-            else originalSender ! AuthFailure("Password incorrect.")
+            else originalSender ! AuthFailure(AUTH_FAILURE_PASSWORD_INVALID)
+          case Failure(_) => originalSender ! AuthFailure(AUTH_FAILURE_SYSTEM)
         }
     }
+  }
+
+  object AuthManager {
+    val AUTH_FAILURE_NOT_FOUND = "Username not found"
+    val AUTH_FAILURE_PASSWORD_INVALID = "Password incorrect"
+    val AUTH_FAILURE_SYSTEM = "System error"
   }
 
 }
