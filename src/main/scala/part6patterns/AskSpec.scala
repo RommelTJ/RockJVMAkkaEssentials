@@ -40,6 +40,13 @@ class AskSpec extends TestKit(ActorSystem("AskSpec"))
       authManager ! Authenticate("rommel", "wrong_password")
       expectMsg(AuthFailure(AUTH_FAILURE_PASSWORD_INVALID))
     }
+
+    "successfully authenticate a registered user" in {
+      val authManager = system.actorOf(Props[AuthManager])
+      authManager ! RegisterUser("rommel", "password")
+      authManager ! Authenticate("rommel", "password")
+      expectMsg(AuthSuccess)
+    }
   }
 
 }
