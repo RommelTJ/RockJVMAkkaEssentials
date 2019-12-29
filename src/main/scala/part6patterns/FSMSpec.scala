@@ -99,6 +99,21 @@ object FSMSpec {
         requester ! VendingError("RequestTimedOut")
         if (money > 0) requester ! GiveBackChange(money)
         context.become(operational(inventory, prices))
+      case ReceiveMoney(amount) =>
+        moneyTimeoutSchedule.cancel()
+        val price = prices(product)
+        if (money + amount >= price) {
+          // User buys product
+          requester ! Deliver(product)
+
+          // Deliver the change
+          if (money + amount - price > 0) requester ! GiveBackChange(money + amount - price)
+
+          // Update the inventory
+          val newStock = inventory(product) - 1
+          val newInventory = inventory + (product -> newStock)
+          context.become(operational(newInventory, prices))
+        }
     }
 
     def startReceiveMoneyTimeoutSchedule: Cancellable = {
