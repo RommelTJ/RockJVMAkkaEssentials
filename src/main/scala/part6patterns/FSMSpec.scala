@@ -1,6 +1,6 @@
 package part6patterns
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -17,6 +17,14 @@ class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
   }
 
   import FSMSpec._
+
+  "A vending machine" should {
+    "error when not initialized" in {
+      val vendingMachine = system.actorOf(Props[VendingMachine])
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(VendingError("MachineNotInitialized"))
+    }
+  }
 
 }
 
