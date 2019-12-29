@@ -196,6 +196,20 @@ object FSMSpec {
   class VendingMachineFSM extends FSM[VendingState, VendingData] {
     // We don't have a receive handler.
     // Triggers an EVENT(Message, Data)
+
+    /**
+     * An FSM is an Actor with a state and data
+     * event => (state, data) can be changed.
+     *
+     * Ex:
+     * state = Idle
+     * data = Uninitialized
+     * event(Initialize(Map(coke -> 10), Map(coke -> 1))) =>
+     *   state = Operational
+     *   data = Initialized(Map(coke -> 10), Map(coke -> 1))
+     *
+     */
+
     startWith(Idle, Uninitialized)
 
     when(Idle) {
