@@ -99,7 +99,7 @@ object FSMSpec {
             val price = prices(product)
             sender() ! Instruction(s"Please insert $price dollars")
             context.become(
-              waitForMoney(inventory, prices, product, price, startReceiveMoneyTimeoutSchedule, sender())
+              waitForMoney(inventory, prices, product, 0, startReceiveMoneyTimeoutSchedule, sender())
             )
         }
     }
