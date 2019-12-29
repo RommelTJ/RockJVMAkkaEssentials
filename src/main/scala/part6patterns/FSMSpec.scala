@@ -199,7 +199,11 @@ object FSMSpec {
     startWith(Idle, Uninitialized)
 
     when(Idle) {
-      ???
+      case Event(Initialize(inventory, prices), Uninitialized) =>
+        goto(Operational) using Initialized(inventory, prices) // equivalent to context.become(operational(inv, pr))
+      case _ =>
+        sender() ! VendingError("MachineNotInitializedError")
+        stay()
     }
 
     when(Operational) {
@@ -209,7 +213,7 @@ object FSMSpec {
     when(WaitForMoney) {
       ???
     }
-    
+
   }
 
 }
