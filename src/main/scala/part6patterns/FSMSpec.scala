@@ -67,7 +67,12 @@ object FSMSpec {
       money: Int,
       moneyTimeoutSchedule: Cancellable,
       requester: ActorRef
-    ): Receive = ???
+    ): Receive = {
+      case ReceiveMoneyTimeout =>
+        requester ! VendingError("RequestTimedOut")
+        if (money > 0) requester ! GiveBackChange(money)
+        context.become(operational(inventory, prices))
+    }
 
     def startReceiveMoneyTimeoutSchedule: Cancellable = {
       context.system.scheduler.scheduleOnce(1 second) {
