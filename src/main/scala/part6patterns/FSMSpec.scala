@@ -113,6 +113,12 @@ object FSMSpec {
           val newStock = inventory(product) - 1
           val newInventory = inventory + (product -> newStock)
           context.become(operational(newInventory, prices))
+        } else {
+          val remainingMoney = price - money - amount
+          requester ! Instruction(s"Please insert $remainingMoney dollars")
+          context.become(
+            waitForMoney(inventory, prices, product, money + amount, startReceiveMoneyTimeoutSchedule, requester)
+          )
         }
     }
 
