@@ -33,7 +33,12 @@ object FSMSpec {
   case object ReceiveMoneyTimeout
 
   class VendingMachine extends Actor with ActorLogging {
-    override def receive: Receive = ???
+    override def receive: Receive = idle
+
+    def idle: Receive = {
+      case Initialize(inv, prices) => context.become(operational(inv, prices))
+      case _ => sender() ! VendingError("MachineNotInitialized")
+    }
   }
 
 }
