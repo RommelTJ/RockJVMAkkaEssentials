@@ -21,6 +21,14 @@ object FSMSpec {
   /**
    * Vending machine
    */
+  case class Initialize(inventory: Map[String, Int], prices: Map[String, Int])
+  case class RequestProduct(product: String)
+
+  case class Instruction(instruction: String) // message the vending machine will show on its "screen"
+  case class ReceiveMoney(amount: Int)
+  case class Deliver(product: String)
+  case class GiveBackChange(amount: Int)
+  
   class VendingMachine extends Actor with ActorLogging {
     override def receive: Receive = ???
   }
