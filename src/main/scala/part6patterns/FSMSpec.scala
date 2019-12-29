@@ -220,7 +220,25 @@ object FSMSpec {
     }
 
     when(WaitForMoney) {
-      ???
+      case Event(ReceiveMoney(amount), WaitForMoneyData(inventory, prices, product, money, requester)) =>
+        val price = prices(product)
+        if (money + amount >= price) {
+          // User buys product
+          requester ! Deliver(product)
+
+          // Deliver the change
+          if (money + amount - price > 0)
+            requester ! GiveBackChange(money + amount - price)
+
+          // Update the inventory
+          val newStock = inventory(product) - 1
+          val newInventory = inventory + (product -> newStock)
+          goto(Operational) using Initialized(newInventory, prices)
+        } else {
+          val remainingMoney = price - money - amount
+          requester ! Instruction(s"Please insert $remainingMoney dollars")
+          stay() using WaitForMoneyData(inventory, prices, product, money + amount, requester)
+        }
     }
 
   }
