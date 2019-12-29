@@ -5,6 +5,10 @@ import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
 class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
   with ImplicitSender with AnyWordSpecLike with BeforeAndAfterAll {
 
@@ -33,6 +37,8 @@ object FSMSpec {
   case object ReceiveMoneyTimeout
 
   class VendingMachine extends Actor with ActorLogging {
+    implicit val executionContext: ExecutionContext = context.dispatcher
+
     override def receive: Receive = idle
 
     def idle: Receive = {
@@ -49,7 +55,7 @@ object FSMSpec {
             val price = prices(product)
             sender() ! Instruction(s"Please insert $price dollars")
             context.become(
-              waitForMoney(inventory, prices, product, price, ???, sender())
+              waitForMoney(inventory, prices, product, price, startReceiveMoneyTimeoutSchedule, sender())
             )
         }
     }
@@ -62,6 +68,13 @@ object FSMSpec {
       moneyTimeoutSchedule: Cancellable,
       requester: ActorRef
     ): Receive = ???
+
+    def startReceiveMoneyTimeoutSchedule: Cancellable = {
+      context.system.scheduler.scheduleOnce(1 second) {
+        self ! ReceiveMoneyTimeout
+      }
+    }
+
   }
 
 }
