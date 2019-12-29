@@ -28,7 +28,10 @@ object FSMSpec {
   case class ReceiveMoney(amount: Int)
   case class Deliver(product: String)
   case class GiveBackChange(amount: Int)
-  
+
+  case class VendingError(reason: String)
+  case object ReceiveMoneyTimeout
+
   class VendingMachine extends Actor with ActorLogging {
     override def receive: Receive = ???
   }
