@@ -43,6 +43,23 @@ class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
         expectMsg(VendingError("RequestTimedOut"))
       }
     }
+
+    "handle the reception of partial money" in {
+      val vendingMachine = system.actorOf(Props[VendingMachine])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 3))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction(s"Please insert 3 dollars"))
+
+      vendingMachine ! ReceiveMoney(1)
+      expectMsg(Instruction("Please insert 2 dollars"))
+
+      within(1.5 seconds) {
+        expectMsg(VendingError("RequestTimedOut"))
+        expectMsg(GiveBackChange(1))
+      }
+    }
+
   }
 
 }
