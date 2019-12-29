@@ -60,6 +60,17 @@ class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
       }
     }
 
+    "deliver the product if I insert all the money" in {
+      val vendingMachine = system.actorOf(Props[VendingMachine])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 3))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction(s"Please insert 3 dollars"))
+
+      vendingMachine ! ReceiveMoney(3)
+      expectMsg(Deliver("coke"))
+    }
+
   }
 
 }
