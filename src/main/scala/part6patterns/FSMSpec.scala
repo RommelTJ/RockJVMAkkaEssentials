@@ -207,7 +207,16 @@ object FSMSpec {
     }
 
     when(Operational) {
-      ???
+      case Event(RequestProduct(product), Initialized(inventory, prices)) =>
+        inventory.get(product) match {
+          case None | Some(0) =>
+            sender() ! VendingError("ProductNotAvailable")
+            stay()
+          case Some(_) =>
+            val price = prices(product)
+            sender() ! Instruction(s"Please insert $price dollars")
+            goto(WaitForMoney) using WaitForMoneyData(inventory, prices, product, 0, sender())
+        }
     }
 
     when(WaitForMoney) {
