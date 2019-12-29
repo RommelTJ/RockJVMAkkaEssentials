@@ -1,6 +1,6 @@
 package part6patterns
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable, FSM, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -192,5 +192,24 @@ object FSMSpec {
     money: Int,
     requester: ActorRef
   ) extends VendingData
+
+  class VendingMachineFSM extends FSM[VendingState, VendingData] {
+    // We don't have a receive handler.
+    // Triggers an EVENT(Message, Data)
+    startWith(Idle, Uninitialized)
+
+    when(Idle) {
+      ???
+    }
+
+    when(Operational) {
+      ???
+    }
+
+    when(WaitForMoney) {
+      ???
+    }
+    
+  }
 
 }
