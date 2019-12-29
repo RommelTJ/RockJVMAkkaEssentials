@@ -1,6 +1,6 @@
 package part6patterns
 
-import akka.actor.{Actor, ActorLogging, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -39,6 +39,29 @@ object FSMSpec {
       case Initialize(inv, prices) => context.become(operational(inv, prices))
       case _ => sender() ! VendingError("MachineNotInitialized")
     }
+
+    def operational(inventory: Map[String, Int], prices: Map[String, Int]): Receive = {
+      case RequestProduct(product) =>
+        inventory.get(product) match {
+          case None | Some(0) =>
+            sender() ! VendingError("ProductNotAvailable")
+          case Some(_) =>
+            val price = prices(product)
+            sender() ! Instruction(s"Please insert $price dollars")
+            context.become(
+              waitForMoney(inventory, prices, product, price, ???, sender())
+            )
+        }
+    }
+
+    def waitForMoney(
+      inventory: Map[String, Int],
+      prices: Map[String, Int],
+      product: String,
+      money: Int,
+      moneyTimeoutSchedule: Cancellable,
+      requester: ActorRef
+    ): Receive = ???
   }
 
 }
