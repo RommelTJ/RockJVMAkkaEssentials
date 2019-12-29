@@ -212,6 +212,11 @@ object FSMSpec {
      * event(RequestProduct(coke)) =>
      *   state = WaitForMoney
      *   data = WaitForMoneyData(Map(coke -> 10), Map(coke -> 1), coke, 0, R)
+     *
+     * Ex:
+     * event(ReceiveMoney(2)) =>
+     *   state = Operational
+     *   data = Initialized(Map(coke -> 9), Map(coke -> 1))
      */
 
     startWith(Idle, Uninitialized)
