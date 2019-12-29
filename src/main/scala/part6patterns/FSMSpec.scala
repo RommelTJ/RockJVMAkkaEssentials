@@ -173,4 +173,13 @@ object FSMSpec {
 
   }
 
+  /**
+   * Rewriting VendingMachine as a Finite-State Machine.
+   */
+  // Step 1 - Define the states and the data of the actor
+  trait VendingState
+  case object Idle extends VendingState
+  case object Operational extends VendingState
+  case object WaitForMoney extends VendingState
+
 }
