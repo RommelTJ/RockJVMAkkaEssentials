@@ -71,6 +71,21 @@ class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
       expectMsg(Deliver("coke"))
     }
 
+    "give back change and be able to request money for a new product" in {
+      val vendingMachine = system.actorOf(Props[VendingMachine])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 3))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction("Please insert 3 dollars"))
+
+      vendingMachine ! ReceiveMoney(4)
+      expectMsg(Deliver("coke"))
+      expectMsg(GiveBackChange(1))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction("Please insert 3 dollars"))
+    }
+
   }
 
 }
