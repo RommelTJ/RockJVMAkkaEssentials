@@ -24,6 +24,13 @@ class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
       vendingMachine ! RequestProduct("coke")
       expectMsg(VendingError("MachineNotInitialized"))
     }
+
+    "report a product is not available" in {
+      val vendingMachine = system.actorOf(Props[VendingMachine])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 1))
+      vendingMachine ! RequestProduct("sandwich")
+      expectMsg(VendingError("ProductNotAvailable"))
+    }
   }
 
 }
