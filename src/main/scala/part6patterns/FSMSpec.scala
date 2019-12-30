@@ -270,6 +270,13 @@ object FSMSpec {
         stay()
     }
 
+    onTransition {
+      case stateA -> stateB =>
+        log.info(s"Transitioning from $stateA to $stateB")
+    }
+
+    initialize() // starts chain of message handlers
+
   }
 
 }
