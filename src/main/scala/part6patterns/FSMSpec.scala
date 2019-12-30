@@ -2,7 +2,7 @@ package part6patterns
 
 import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable, FSM, Props}
 import akka.testkit.{ImplicitSender, TestKit}
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{BeforeAndAfterAll, OneInstancePerTest}
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.concurrent.ExecutionContext
@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
-  with ImplicitSender with AnyWordSpecLike with BeforeAndAfterAll {
+  with ImplicitSender with AnyWordSpecLike with BeforeAndAfterAll with OneInstancePerTest {
 
   override protected def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
