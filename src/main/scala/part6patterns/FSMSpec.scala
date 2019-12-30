@@ -295,7 +295,7 @@ object FSMSpec {
       case Event(Initialize(inventory, prices), Uninitialized) =>
         goto(Operational) using Initialized(inventory, prices) // equivalent to context.become(operational(inv, pr))
       case _ =>
-        sender() ! VendingError("MachineNotInitializedError")
+        sender() ! VendingError("MachineNotInitialized")
         stay()
     }
 
