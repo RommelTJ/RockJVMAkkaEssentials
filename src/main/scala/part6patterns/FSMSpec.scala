@@ -264,6 +264,12 @@ object FSMSpec {
         }
     }
 
+    whenUnhandled {
+      case Event(_, _) =>
+        sender() ! VendingError("CommandNotFound")
+        stay()
+    }
+
   }
 
 }
