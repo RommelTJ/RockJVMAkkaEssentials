@@ -88,6 +88,76 @@ class FSMSpec extends TestKit(ActorSystem("FSMSpec"))
 
   }
 
+  "An FSM vending machine" should {
+    "error when not initialized" in {
+      val vendingMachine = system.actorOf(Props[VendingMachineFSM])
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(VendingError("MachineNotInitialized"))
+    }
+
+    "report a product is not available" in {
+      val vendingMachine = system.actorOf(Props[VendingMachineFSM])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 1))
+      vendingMachine ! RequestProduct("sandwich")
+      expectMsg(VendingError("ProductNotAvailable"))
+    }
+
+    "throw a timeout if I don't insert money" in {
+      val vendingMachine = system.actorOf(Props[VendingMachineFSM])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 1))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction(s"Please insert 1 dollars"))
+
+      within(1.5 seconds) {
+        expectMsg(VendingError("RequestTimedOut"))
+      }
+    }
+
+    "handle the reception of partial money" in {
+      val vendingMachine = system.actorOf(Props[VendingMachineFSM])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 3))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction(s"Please insert 3 dollars"))
+
+      vendingMachine ! ReceiveMoney(1)
+      expectMsg(Instruction("Please insert 2 dollars"))
+
+      within(1.5 seconds) {
+        expectMsg(VendingError("RequestTimedOut"))
+        expectMsg(GiveBackChange(1))
+      }
+    }
+
+    "deliver the product if I insert all the money" in {
+      val vendingMachine = system.actorOf(Props[VendingMachineFSM])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 3))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction(s"Please insert 3 dollars"))
+
+      vendingMachine ! ReceiveMoney(3)
+      expectMsg(Deliver("coke"))
+    }
+
+    "give back change and be able to request money for a new product" in {
+      val vendingMachine = system.actorOf(Props[VendingMachineFSM])
+      vendingMachine ! Initialize(inventory = Map("coke" -> 10), prices = Map("coke" -> 3))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction("Please insert 3 dollars"))
+
+      vendingMachine ! ReceiveMoney(4)
+      expectMsg(Deliver("coke"))
+      expectMsg(GiveBackChange(1))
+
+      vendingMachine ! RequestProduct("coke")
+      expectMsg(Instruction("Please insert 3 dollars"))
+    }
+
+  }
+
 }
 
 object FSMSpec {
